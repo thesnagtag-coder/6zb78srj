@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeLife — Farm &amp; Rural Household · PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════ THEME ENGINE ═══════════ */
+:root {
+  --navy:#0D1B2A; --navy-mid:#1A2F45;
+  --critical:#DC2626; --high:#EA580C; --medium:#D97706; --low:#16A34A;
+  --radius:12px;
+  --shadow:0 2px 12px rgba(13,27,42,0.08);
+  --shadow-lg:0 8px 32px rgba(13,27,42,0.14);
+}
+body[data-theme="barnred"]  { --accent:#8C3B2B; --accent-dark:#692C20; --accent-rgb:140,59,43; }
+body[data-theme="eucalyptus"] { --accent:#5E9C82; --accent-dark:#467562; --accent-rgb:94,156,130; }
+body[data-theme="periwinkle"] { --accent:#7680B5; --accent-dark:#596088; --accent-rgb:118,128,181; }
+body[data-theme="teal"]   { --accent:#14B8A6; --accent-dark:#0D9488; --accent-rgb:20,184,166; }
+body[data-theme="amber"]  { --accent:#F59E0B; --accent-dark:#D97706; --accent-rgb:245,158,11; }
+body[data-theme="rose"]   { --accent:#E11D48; --accent-dark:#BE123C; --accent-rgb:225,29,72; }
+body[data-theme="violet"] { --accent:#7C3AED; --accent-dark:#6D28D9; --accent-rgb:124,58,237; }
+body[data-theme="ocean"]  { --accent:#2563EB; --accent-dark:#1D4ED8; --accent-rgb:37,99,235; }
+body[data-theme="forest"] { --accent:#16A34A; --accent-dark:#15803D; --accent-rgb:22,163,74; }
+body[data-mode="light"] {
+  --bg:#F9F6F0; --surface:#FFFFFF; --surface-2:#EDE6D6; --tile:#F9F6F0;
+  --ink:#0D1B2A; --ink-mid:#3A4A5C; --ink-soft:#6B7A8D; --line:#EDE6D6;
+  --critical-bg:#FEF2F2; --high-bg:#FFF7ED; --medium-bg:#FFFBEB; --low-bg:#F0FDF4;
+}
+body[data-mode="dark"] {
+  --bg:#0B1420; --surface:#13202F; --surface-2:#1C2C3E; --tile:#0F1A28;
+  --ink:#EDF2F7; --ink-mid:#B7C4D1; --ink-soft:#8194A7; --line:#243549;
+  --critical-bg:rgba(220,38,38,.16); --high-bg:rgba(234,88,12,.16);
+  --medium-bg:rgba(217,119,6,.16); --low-bg:rgba(22,163,74,.16);
+  --shadow:0 2px 12px rgba(0,0,0,0.35); --shadow-lg:0 8px 32px rgba(0,0,0,0.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
+
+/* ═══════════ TOP BAR ═══════════ */
+.topbar{background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 20px;min-height:58px;position:relative;z-index:300;border-bottom:2px solid var(--accent);flex-wrap:wrap;}
+.topbar-brand{display:flex;align-items:center;gap:12px;}
+.topbar-logo{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;font-family:'Sora',sans-serif;color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.4);}
+.topbar-name{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.3px;}
+.topbar-name span{color:var(--accent);}
+.topbar-tagline{font-size:11px;color:rgba(255,255,255,.5);font-style:italic;}
+.topbar-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.progress-pill{background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.3);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.progress-pill span{color:#fff;font-size:13px;}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;}
+.tool-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s;position:relative;}
+.tool-btn:hover{background:rgba(var(--accent-rgb),.3);border-color:var(--accent);}
+.tool-btn .tb-label{font-size:11px;}
+@media(max-width:820px){.tool-btn .tb-label{display:none;}.topbar-tagline{display:none;}}
+
+/* ═══════════ DROPDOWN PANELS ═══════════ */
+.dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);padding:10px;display:none;z-index:400;min-width:190px;}
+.dropdown.open{display:block;}
+.dropdown-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink-soft);padding:4px 8px 8px;}
+.theme-row{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border:none;background:none;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink);text-align:left;}
+.theme-row:hover{background:rgba(var(--accent-rgb),.08);}
+.theme-row.selected{background:rgba(var(--accent-rgb),.12);}
+.theme-swatch{width:18px;height:18px;border-radius:6px;flex-shrink:0;}
+.theme-row .check-mark{margin-left:auto;color:var(--accent);font-weight:800;}
+
+/* ═══════════ HERO ═══════════ */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,#2A1B0E 100%);padding:48px 32px 40px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(var(--accent-rgb),.14) 0%,transparent 60%);}
+.hero-emoji{font-size:64px;line-height:1;margin-bottom:12px;display:block;position:relative;}
+.hero-title{font-family:'Sora',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-bottom:6px;position:relative;}
+.hero-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:20px;position:relative;}
+.hero-badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;}
+.hero-badge{background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.35);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:5px;cursor:pointer;transition:background .2s,transform .15s;user-select:none;}
+.hero-badge:hover{background:rgba(var(--accent-rgb),.28);transform:translateY(-1px);}
+
+/* ═══════════ PROGRESS ═══════════ */
+.progress-section{background:var(--surface);border-bottom:1px solid var(--line);padding:0 32px;height:46px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:290;box-shadow:0 2px 8px rgba(13,27,42,.06);}
+.progress-label{font-size:12px;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
+.progress-track{flex:1;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:4px;width:0%;transition:width .4s ease;}
+.progress-count{font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;}
+.celebrate{display:none;background:linear-gradient(135deg,rgba(var(--accent-rgb),.15),rgba(var(--accent-rgb),.05));border-bottom:1px solid rgba(var(--accent-rgb),.3);padding:14px 32px;text-align:center;font-weight:700;color:var(--accent-dark);font-size:15px;font-family:'Sora',sans-serif;}
+.celebrate.show{display:block;}
+
+/* ═══════════ SEARCH ═══════════ */
+.search-wrap{padding:20px 20px 0;max-width:860px;margin:0 auto;}
+.search-box{width:100%;padding:10px 16px 10px 40px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7A8D' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center;transition:border-color .2s;}
+.search-box:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1);}
+.search-no-results{text-align:center;padding:40px;color:var(--ink-soft);font-size:14px;display:none;}
+
+/* ═══════════ ZONE TABS ═══════════ */
+.zone-tabs{background:var(--surface);border-bottom:2px solid var(--line);display:flex;overflow-x:auto;padding:0 24px;gap:4px;scrollbar-width:none;position:sticky;top:46px;z-index:200;}
+.zone-tabs::-webkit-scrollbar{display:none;}
+.zone-tab{display:flex;align-items:center;gap:7px;padding:14px 18px;border:none;background:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink-soft);white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;margin-bottom:-2px;}
+.zone-tab:hover{color:var(--accent);background:rgba(var(--accent-rgb),.05);}
+.zone-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.zone-tab-count{background:var(--surface-2);border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;color:var(--ink-soft);}
+.zone-tab.active .zone-tab-count{background:rgba(var(--accent-rgb),.15);color:var(--accent);}
+
+/* ═══════════ MAIN / STATS ═══════════ */
+.main{max-width:860px;margin:0 auto;padding:28px 20px 60px;}
+.stats-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+.stat-pill{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;user-select:none;}
+.stat-pill:hover{border-color:var(--accent);}
+.stat-pill.filter-on{border-color:var(--accent);background:rgba(var(--accent-rgb),.08);box-shadow:0 0 0 2px rgba(var(--accent-rgb),.15);}
+.stat-dot{width:8px;height:8px;border-radius:50%;}
+.stat-dot.critical{background:var(--critical);}.stat-dot.high{background:var(--high);}.stat-dot.medium{background:var(--medium);}.stat-dot.low{background:var(--low);}
+.stat-count{font-size:15px;font-weight:700;}
+.risk-legend{display:flex;gap:12px;flex-wrap:wrap;margin-left:auto;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink-soft);}
+.legend-dot{width:8px;height:8px;border-radius:3px;}
+
+/* ═══════════ ZONE PANEL ═══════════ */
+.zone-panel{display:none;}
+.zone-panel.active{display:block;}
+.zone-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding:20px 24px;background:var(--surface);border-radius:var(--radius);border:1px solid rgba(var(--accent-rgb),.2);box-shadow:var(--shadow);}
+.zone-icon{width:52px;height:52px;background:linear-gradient(135deg,rgba(var(--accent-rgb),.12),rgba(var(--accent-rgb),.06));border:2px solid rgba(var(--accent-rgb),.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.zone-header-text h2{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.zone-header-text p{font-size:13px;color:var(--ink-soft);}
+
+/* ═══════════ CHECK CARDS ═══════════ */
+.checks-list{display:flex;flex-direction:column;gap:10px;}
+.check-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s;}
+.check-card:hover{box-shadow:var(--shadow-lg);}
+.check-card.completed{border-color:rgba(var(--accent-rgb),.3);background:rgba(var(--accent-rgb),.03);}
+.check-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;}
+.check-checkbox{width:22px;height:22px;min-width:22px;border:2px solid var(--surface-2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:13px;background:var(--surface);}
+.check-card.completed .check-checkbox{background:var(--accent);border-color:var(--accent);color:#fff;}
+.check-num{font-size:10px;font-weight:700;color:var(--ink-soft);min-width:30px;font-family:'Sora',sans-serif;}
+.check-risk{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+.risk-critical{background:var(--critical-bg);color:var(--critical);}
+.risk-high{background:var(--high-bg);color:var(--high);}
+.risk-medium{background:var(--medium-bg);color:var(--medium);}
+.risk-low{background:var(--low-bg);color:var(--low);}
+.check-title{flex:1;font-size:14px;font-weight:600;color:var(--ink);line-height:1.4;}
+.check-card.completed .check-title{color:var(--ink-soft);text-decoration:line-through;}
+.check-chevron{font-size:12px;color:var(--ink-soft);transition:transform .25s;min-width:16px;}
+.check-card.open .check-chevron{transform:rotate(180deg);}
+.check-detail{display:none;padding:0 18px 18px 18px;border-top:1px solid var(--line);}
+.check-card.open .check-detail{display:block;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+@media(max-width:600px){.detail-grid{grid-template-columns:1fr;}}
+.detail-item{background:var(--tile);border-radius:8px;padding:11px 13px;}
+.detail-item.full{grid-column:1/-1;}
+.detail-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--accent-dark);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+body[data-mode="dark"] .detail-label{color:var(--accent);}
+.detail-value{font-size:13px;color:var(--ink);line-height:1.55;}
+.tip-box{margin-top:12px;background:linear-gradient(135deg,rgba(var(--accent-rgb),.08),rgba(var(--accent-rgb),.04));border:1px solid rgba(var(--accent-rgb),.25);border-left:4px solid var(--accent);border-radius:8px;padding:11px 14px;display:flex;gap:10px;align-items:flex-start;}
+.tip-icon{font-size:16px;line-height:1;margin-top:1px;}
+.tip-text{font-size:13px;color:var(--ink);line-height:1.55;}
+.tip-text strong{color:var(--accent-dark);font-weight:700;}
+body[data-mode="dark"] .tip-text strong{color:var(--accent);}
+.measurement-box{margin-top:10px;background:rgba(var(--accent-rgb),.05);border:1px solid var(--line);border-radius:8px;padding:10px 13px;font-size:12px;color:var(--ink-mid);line-height:1.5;font-family:'Sora',sans-serif;}
+.measurement-box strong{color:var(--ink);font-size:11px;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px;}
+
+/* ═══════════ ZONE ACTIONS ═══════════ */
+.zone-actions{display:flex;justify-content:flex-end;gap:10px;margin:14px 0 18px;flex-wrap:wrap;}
+.btn{padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-outline{background:var(--surface);border:1px solid var(--line);color:var(--ink-mid);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.3);}
+.btn-primary:hover{box-shadow:0 4px 16px rgba(var(--accent-rgb),.4);transform:translateY(-1px);}
+
+/* ═══════════ MODALS ═══════════ */
+.modal-overlay{position:fixed;inset:0;background:rgba(13,27,42,.6);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:16px;max-width:640px;width:100%;box-shadow:var(--shadow-lg);border-top:4px solid var(--accent);}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--line);}
+.modal-head h3{font-family:'Sora',sans-serif;font-size:18px;color:var(--ink);display:flex;align-items:center;gap:8px;}
+.modal-close{background:none;border:none;font-size:22px;color:var(--ink-soft);cursor:pointer;line-height:1;padding:4px;}
+.modal-close:hover{color:var(--accent);}
+.modal-body{padding:20px 24px 26px;color:var(--ink-mid);font-size:13.5px;}
+.modal-body h4{font-family:'Sora',sans-serif;font-size:14px;color:var(--ink);margin:16px 0 6px;display:flex;align-items:center;gap:6px;}
+.modal-body h4:first-child{margin-top:0;}
+.modal-body p{margin-bottom:8px;}
+.modal-body table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0;}
+.modal-body th{text-align:left;padding:7px 10px;background:rgba(var(--accent-rgb),.1);color:var(--ink);font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
+.modal-body td{padding:7px 10px;border-bottom:1px solid var(--line);color:var(--ink-mid);}
+.modal-body td strong{color:var(--ink);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:0 24px 22px;flex-wrap:wrap;}
+.rule-list{list-style:none;margin:6px 0;}
+.rule-list li{padding:6px 0 6px 26px;position:relative;border-bottom:1px dashed var(--line);}
+.rule-list li::before{content:'✓';position:absolute;left:2px;color:var(--accent);font-weight:800;}
+
+/* ═══════════ COLLECTION / UPSELL ═══════════ */
+.collection{max-width:860px;margin:0 auto;padding:10px 20px 50px;}
+.collection h3{font-family:'Sora',sans-serif;font-size:18px;color:var(--ink);margin-bottom:4px;}
+.collection>p{font-size:13px;color:var(--ink-soft);margin-bottom:16px;}
+.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;}
+.module-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;transition:all .2s;}
+.module-card:hover{border-color:var(--accent);box-shadow:var(--shadow);}
+.module-card .m-emoji{font-size:26px;}
+.module-card .m-name{font-family:'Sora',sans-serif;font-weight:700;font-size:13.5px;color:var(--ink);}
+.module-card .m-age{font-size:11.5px;color:var(--ink-soft);}
+.module-tag{margin-top:6px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:6px;padding:3px 8px;align-self:flex-start;}
+.module-tag.owned{background:rgba(var(--accent-rgb),.15);color:var(--accent-dark);}
+body[data-mode="dark"] .module-tag.owned{color:var(--accent);}
+.module-tag.addon{background:var(--surface-2);color:var(--ink-soft);}
+.module-tag.coming{background:transparent;color:var(--ink-soft);border:1px dashed var(--line);}
+
+/* ═══════════ FOOTER ═══════════ */
+.footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:12px;line-height:1.8;}
+.footer strong{color:rgba(255,255,255,.8);}
+
+/* ═══════════ TRADEMARK ICON SET ═══════════ */
+.zic svg{width:16px;height:16px;vertical-align:-3px;}
+.zone-tab .zic svg{color:inherit;}
+.topbar-logo svg{width:22px;height:22px;color:#fff;}
+.hero-emoji svg{width:72px;height:72px;color:var(--accent);filter:drop-shadow(0 4px 14px rgba(var(--accent-rgb),.45));}
+.zone-icon svg{width:27px;height:27px;color:var(--accent-dark);}
+body[data-mode="dark"] .zone-icon svg{color:var(--accent);}
+.module-card .m-emoji svg{width:30px;height:30px;color:var(--accent-dark);}
+body[data-mode="dark"] .module-card .m-emoji svg{color:var(--accent);}
+
+/* ═══════════ FLOATING NAV / DISCLAIMERS ═══════════ */
+html{scroll-behavior:smooth;}
+.float-nav{position:fixed;right:16px;bottom:20px;display:flex;flex-direction:column;gap:8px;z-index:250;}
+html[dir="rtl"] .float-nav{right:auto;left:16px;}
+.float-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent-dark);font-size:18px;font-weight:800;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .2s;}
+.float-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-2px);}
+body[data-mode="dark"] .float-btn{color:var(--accent);}
+.zone-disclaimer{margin-top:18px;padding:10px 14px;border:1px dashed var(--line);border-radius:8px;font-size:11.5px;color:var(--ink-soft);text-align:center;}
+.print-disclaimer{display:none;}
+
+/* ═══════════ PRINT ═══════════ */
+#cheat-print{display:none;}
+@media print{
+  body{background:#fff !important;color:#000;font-size:11px;margin:0 !important;padding:0 !important;}
+  .topbar,.hero,.search-wrap,.zone-tabs,.progress-section,.zone-actions,.stats-bar,.collection,.modal-overlay,.celebrate,.dropdown{display:none !important;}
+  .main{max-width:100%;padding:0 0 30px;}
+  .check-card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid;margin-bottom:6px;}
+  .check-detail{display:block !important;border-top:1px solid #ddd;}
+  .check-chevron{display:none;}
+  .zone-panel{display:block !important;page-break-before:auto;}
+  .zone-header{box-shadow:none;border:1px solid #ccc;margin-top:14px;}
+  body.print-zone .zone-panel{display:none !important;}
+  body.print-zone .zone-panel.active{display:block !important;}
+  body.print-cheat .main,body.print-cheat .footer,body.print-cheat .zone-panel,body.print-cheat .print-disclaimer{display:none !important;}
+  body.print-cheat #cheat-print{display:block !important;}
+  #cheat-print{margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cp-card{border:2.5px solid #0D1B2A;border-radius:16px;overflow:hidden;font-family:'Inter',sans-serif;color:#0D1B2A;height:272mm;display:flex;flex-direction:column;page-break-inside:avoid;page-break-after:avoid;}
+  .cp-head{background:#0D1B2A !important;color:#fff;display:flex;align-items:center;gap:12px;padding:13px 22px;}
+  .cp-head svg{width:38px;height:38px;color:var(--accent);}
+  .cp-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;line-height:1.2;}
+  .cp-title em{color:var(--accent);font-style:normal;}
+  .cp-sub{font-size:11.5px;color:rgba(255,255,255,.78);margin-top:2px;}
+  .cp-tag{margin-left:auto;font-size:10px;font-style:italic;color:rgba(255,255,255,.65);text-align:right;}
+  .cp-contacts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:11px 22px;background:rgba(var(--accent-rgb),.09) !important;}
+  .cp-chip{border:1.2px solid rgba(var(--accent-rgb),.55);border-radius:8px;padding:5px 9px;background:#fff !important;}
+  .cp-chip b{display:block;font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--accent-dark);}
+  .cp-chip span{font-size:12px;font-weight:700;}
+  .cp-cols{display:flex;gap:20px;padding:13px 22px 6px;flex:1;min-height:0;overflow:hidden;}
+  .cp-cols h3{font-family:'Sora',sans-serif;font-size:13px;border-bottom:2px solid var(--accent);padding-bottom:3px;margin:0 0 8px;}
+  .cp-rules{flex:1.15;}
+  .cp-rules ul{list-style:none;margin:0;padding:0;}
+  .cp-rules li{font-size:11px;line-height:1.5;padding:4px 0 4px 18px;position:relative;border-bottom:1px dashed #ddd;}
+  .cp-rules li::before{content:'✓';position:absolute;left:0;color:var(--accent-dark);font-weight:800;}
+  html[dir="rtl"] .cp-rules li{padding:4px 18px 4px 0;}
+  html[dir="rtl"] .cp-rules li::before{left:auto;right:0;}
+  .cp-numsec{flex:1;}
+  .cp-numsec table{width:100%;border-collapse:collapse;font-size:10.5px;}
+  .cp-numsec td{border-bottom:1px solid #eee;padding:4px 5px;vertical-align:top;}
+  .cp-numsec td strong{color:#0D1B2A;}
+  .cp-notes{margin:6px 22px 10px;border:1.5px dashed var(--accent);border-radius:10px;padding:8px 13px;font-size:11px;white-space:pre-wrap;max-height:34mm;overflow:hidden;}
+  .cp-notes b{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent-dark);display:block;margin-bottom:2px;}
+  .cp-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#0D1B2A !important;color:rgba(255,255,255,.85);padding:9px 22px;font-size:10px;line-height:1.55;margin-top:auto;}
+  .cp-foot b{color:var(--accent);}
+  .cp-qr{display:flex;align-items:center;gap:10px;text-align:right;}
+  .cp-qr img{width:68px;height:68px;background:#fff;border-radius:8px;padding:3px;}
+  .cp-qr .qr-ph{width:68px;height:68px;border:1.5px dashed rgba(255,255,255,.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:8.5px;text-align:center;color:rgba(255,255,255,.6);padding:4px;}
+  .footer{background:#fff;color:#555;}
+  .footer strong{color:#000;}
+  .float-nav{display:none !important;}
+  .print-disclaimer{display:block !important;position:fixed;bottom:0;left:0;right:0;text-align:center;font-size:8.5px;color:#666;border-top:1px solid #ccc;padding:3px 0;background:#fff;}
+  @page{size:A4;margin:10mm 10mm 12mm;}
+}
+</style>
+</head>
+<body data-theme="barnred" data-mode="light">
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo" id="logo-icon">S</div>
+    <div>
+      <div class="topbar-name">Safe<span>Life</span></div>
+      <div class="topbar-tagline">To all moms by a mom · NEBOSH &amp; OSHA Professional</div>
+    </div>
+  </div>
+  <div class="topbar-meta">
+    <div class="toolbar">
+      <button class="tool-btn" id="btn-search" title="Search all checks">🔍</button>
+      <button class="tool-btn" id="btn-manual" title="User Manual">📖<span class="tb-label" data-i18n="manual">Manual</span></button>
+      <button class="tool-btn" id="btn-cheat" title="Emergency Cheat Sheet">🚨<span class="tb-label" data-i18n="cheat">Cheat Sheet</span></button>
+      <button class="tool-btn" id="btn-print" title="Print / Save as PDF">🖨️<span class="tb-label" data-i18n="printPdf">Print / PDF</span></button>
+      <button class="tool-btn" id="btn-save" title="Save progress to file">💾<span class="tb-label" data-i18n="save">Save</span></button>
+      <button class="tool-btn" id="btn-load" title="Load saved progress">📂<span class="tb-label" data-i18n="load">Load</span></button>
+      <button class="tool-btn" id="btn-lang" title="Language" style="display:none">🌐<span class="tb-label" id="lang-label">EN</span>
+        <div class="dropdown" id="dd-lang"></div>
+      </button>
+      <button class="tool-btn" id="btn-theme" title="Colour theme">🎨<span class="tb-label" data-i18n="theme">Theme</span>
+        <div class="dropdown" id="dd-theme"></div>
+      </button>
+      <button class="tool-btn" id="btn-mode" title="Light / dark mode">🌙</button>
+    </div>
+    <div class="progress-pill"><span id="topbar-done">0</span>&nbsp;/ 84 <span data-i18n="checksDone" style="color:inherit;font-size:12px;">checks done</span></div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji" id="hero-icon">🚜</span>
+  <div class="hero-title" data-i18n="heroTitle">Farm &amp; Rural Household Safety</div>
+  <div class="hero-subtitle" data-i18n="heroSub">84 practical safety checks across 6 zones · Helping families build strong, confident safety habits around machinery, water, animals and chemicals on farms and rural properties</div>
+  <div class="hero-badges">
+    <div class="hero-badge" data-zone="1"><span class="zic" data-zi="z1"></span> <span data-i18n="bz1">Machinery &amp; Vehicles</span></div>
+    <div class="hero-badge" data-zone="2"><span class="zic" data-zi="z2"></span> <span data-i18n="bz2">Open Water Safety</span></div>
+    <div class="hero-badge" data-zone="3"><span class="zic" data-zi="z3"></span> <span data-i18n="bz3">Livestock Safety</span></div>
+    <div class="hero-badge" data-zone="4"><span class="zic" data-zi="z4"></span> <span data-i18n="bz4">Chemical &amp; Fuel Storage</span></div>
+    <div class="hero-badge" data-zone="5"><span class="zic" data-zi="z5"></span> <span data-i18n="bz5">Structures &amp; Electrical</span></div>
+    <div class="hero-badge" data-zone="6"><span class="zic" data-zi="z6"></span> <span data-i18n="bz6">Emergency Preparedness</span></div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-section">
+  <div class="progress-label" data-i18n="overallProgress">Overall Progress</div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="progress-count" id="progress-count">0 of 84</div>
+</div>
+<div class="celebrate" id="celebrate">🎉 <span data-i18n="celebrate">All 84 checks complete — you've built strong, confident safety habits around machinery, water, animals and chemicals on your farm or rural property. Print your checklist to keep on hand.</span></div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <input class="search-box" type="text" id="search-input" placeholder="Search checks… e.g. PTO shaft, pond fencing, grain bin, chemical storage, well cover, kick zone…">
+</div>
+
+<!-- ZONE TABS -->
+<div class="zone-tabs" id="zone-tabs">
+  <button class="zone-tab active" data-zone="1"><span class="zic" data-zi="z1"></span> <span data-i18n="z1">Machinery &amp; Vehicle Safety</span> <span class="zone-tab-count" id="ztc-1">0/14</span></button>
+  <button class="zone-tab" data-zone="2"><span class="zic" data-zi="z2"></span> <span data-i18n="z2">Open Water &amp; Drowning Prevention</span> <span class="zone-tab-count" id="ztc-2">0/14</span></button>
+  <button class="zone-tab" data-zone="3"><span class="zic" data-zi="z3"></span> <span data-i18n="z3">Livestock &amp; Large Animal Safety</span> <span class="zone-tab-count" id="ztc-3">0/14</span></button>
+  <button class="zone-tab" data-zone="4"><span class="zic" data-zi="z4"></span> <span data-i18n="z4">Chemical, Fuel &amp; Pesticide Storage</span> <span class="zone-tab-count" id="ztc-4">0/14</span></button>
+  <button class="zone-tab" data-zone="5"><span class="zic" data-zi="z5"></span> <span data-i18n="z5">Structures, Falls &amp; Rural Electrical Hazards</span> <span class="zone-tab-count" id="ztc-5">0/14</span></button>
+  <button class="zone-tab" data-zone="6"><span class="zic" data-zi="z6"></span> <span data-i18n="z6">Emergency Preparedness for Remote &amp; Rural Properties</span> <span class="zone-tab-count" id="ztc-6">0/14</span></button>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-content">
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-pill" data-risk="critical"><span class="stat-dot critical"></span><span class="stat-count" id="s-critical">0</span> <span data-i18n="critical">Critical</span></div>
+    <div class="stat-pill" data-risk="high"><span class="stat-dot high"></span><span class="stat-count" id="s-high">0</span> <span data-i18n="high">High</span></div>
+    <div class="stat-pill" data-risk="medium"><span class="stat-dot medium"></span><span class="stat-count" id="s-medium">0</span> <span data-i18n="medium">Medium</span></div>
+    <div class="stat-pill" data-risk="low"><span class="stat-dot low"></span><span class="stat-count" id="s-low">0</span> <span data-i18n="low">Low</span></div>
+    <div class="risk-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--critical)"></div><span data-i18n="legendCritical">Critical = immediate action</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--high)"></div><span data-i18n="legendHigh">High = urgent attention</span></div>
+    </div>
+  </div>
+  <div id="search-no-results" class="search-no-results"><span data-i18n="noResults">No checks match your search. Try different keywords.</span><br><span data-i18n="notCovered" style="font-size:12.5px;"></span></div>
+</div>
+
+<!-- COLLECTION -->
+<div class="collection">
+  <h3 data-i18n="collTitle">The SafeLife Collection</h3>
+  <p data-i18n="collSub">One safety system for every stage of life. Add more modules any time — each works exactly like this one.</p>
+  <div class="collection-grid" id="collection-grid"></div>
+</div>
+
+<!-- SITUATION MODULES -->
+<div class="collection" style="padding-top:0;">
+  <h3>Situation Modules</h3>
+  <p>Real-life situations and conditions — each its own complete, standalone 84-check system. Available separately as they launch.</p>
+  <div class="collection-grid" id="situation-grid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <strong>SafeLife</strong> · Farm &amp; Rural Household Module · PRO Edition<br>
+  Created by a NEBOSH &amp; OSHA trained HSE professional · "To all moms by a mom"<br>
+  Evidence base: general agricultural safety guidance comparable to established occupational farm-safety frameworks such as HSE agriculture guidance · WHO guidance on pesticide safety and storage · general fencing and barrier safety principles for open water features · general occupational guidance on machinery guarding and confined-space/engulfment awareness<br>
+  <span style="color:rgba(255,255,255,.35);" data-i18n="disclaimer">This checklist is educational general farm and rural household safety guidance to help families build strong safety habits around machinery, water, animals and chemicals. It is not professional agricultural machinery operation training, veterinary guidance, or a substitute for local regulations. If you have concerns about specific machinery operation, animal handling, chemical use, or structural safety on your property, please consult a qualified agricultural safety professional, equipment manufacturer, or your local regulations.</span>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-manual">
+  <div class="modal">
+    <div class="modal-head"><h3>📖 <span data-i18n="manualTitle">User Manual</span></h3><button class="modal-close" data-close="modal-manual">✕</button></div>
+    <div class="modal-body" id="manual-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cheat">
+  <div class="modal">
+    <div class="modal-head"><h3>🚨 <span data-i18n="cheatTitle">Emergency Cheat Sheet</span></h3><button class="modal-close" data-close="modal-cheat">✕</button></div>
+    <div class="modal-body" id="cheat-body"></div>
+    <div class="modal-actions"><button class="btn btn-outline" id="btn-seller" title="Seller: set this product's QR code" style="margin-right:auto;">⚙</button><button class="btn btn-primary" id="btn-print-cheat" data-i18n="printCheat">🖨️ Print cheat sheet</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-seller">
+  <div class="modal">
+    <div class="modal-head"><h3>⚙ Seller Settings</h3><button class="modal-close" data-close="modal-seller">✕</button></div>
+    <div class="modal-body" id="seller-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-print">
+  <div class="modal">
+    <div class="modal-head"><h3>🖨️ <span data-i18n="printTitle">Print or Save as PDF</span></h3><button class="modal-close" data-close="modal-print">✕</button></div>
+    <div class="modal-body">
+      <p data-i18n="printHint">Choose what to print. To save as a PDF instead of printing on paper, choose "Save as PDF" as the printer in the print dialog.</p>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px;" data-i18n="printNote">All checks are automatically expanded to full detail when printing — no need to open them first.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="print-zone" data-i18n="printZone">Current zone only</button>
+      <button class="btn btn-outline" id="print-cheat2" data-i18n="printCheat2">Cheat sheet</button>
+      <button class="btn btn-primary" id="print-all" data-i18n="printAll">Full checklist (all 84)</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="load-file" accept=".json" style="display:none">
+
+<!-- FLOATING CHECK NAVIGATION -->
+<div class="float-nav">
+  <button class="float-btn" id="fn-top" title="Back to top">⤒</button>
+  <button class="float-btn" id="fn-prev" title="Previous check">↑</button>
+  <button class="float-btn" id="fn-next" title="Next check">↓</button>
+</div>
+
+<!-- PRINT PAGE DISCLAIMER (repeats on every printed page) -->
+<div class="print-disclaimer" data-i18n="disclaimer">This checklist is educational general farm and rural household safety guidance to help families build strong safety habits around machinery, water, animals and chemicals. It is not professional agricultural machinery operation training, veterinary guidance, or a substitute for local regulations. If you have concerns about specific machinery operation, animal handling, chemical use, or structural safety on your property, please consult a qualified agricultural safety professional, equipment manufacturer, or your local regulations.</div>
+
+<div id="cheat-print"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// SELLER BRANDING — edit these three lines to make it yours
+// ═══════════════════════════════════════════
+const BRAND_NAME = 'The Snag Tag';
+const STORE_URL  = '';   // e.g. 'thesnagtag.gumroad.com' — printed under the QR code on the cheat sheet
+const QR_IMAGE   = '';   // paste your QR code as a data URL: 'data:image/png;base64,...'
+
+// ═══════════════════════════════════════════
+// I18N — interface language pack (English-only release; check content in English, verified guidance)
+// ═══════════════════════════════════════════
+const I18N = {
+en:{name:'English',manual:'Manual',cheat:'Cheat Sheet',printPdf:'Print / PDF',save:'Save',load:'Load',theme:'Theme',checksDone:'checks done',heroTitle:'Farm &amp; Rural Household Safety',heroSub:'84 practical safety checks across 6 zones · Helping families build strong, confident safety habits around machinery, water, animals and chemicals on farms and rural properties',bz1:'Machinery &amp; Vehicles',bz2:'Open Water Safety',bz3:'Livestock Safety',bz4:'Chemical &amp; Fuel Storage',bz5:'Structures &amp; Electrical',bz6:'Emergency Preparedness',overallProgress:'Overall Progress',ofWord:'of',z1:'Machinery &amp; Vehicle Safety',z2:'Open Water &amp; Drowning Prevention',z3:'Livestock &amp; Large Animal Safety',z4:'Chemical, Fuel &amp; Pesticide Storage',z5:'Structures, Falls &amp; Rural Electrical Hazards',z6:'Emergency Preparedness for Remote &amp; Rural Properties',zd1:'14 checks: tractors, ATVs/quad bikes, PTO shaft guarding, mowers, keeping children away from moving machinery, safe start-up and shutdown habits, and rollover awareness.',zd2:'14 checks: ponds, dams, irrigation channels, water troughs, wells, slurry/effluent pits, and fencing and barrier awareness around water features.',zd3:'14 checks: safe handling distances, kick and goring zones, keeping a clear escape route near animals, calm handling habits, keeping children at a safe distance, and awareness of protective new-mother animal behaviour.',zd4:'14 checks: locked and secure storage away from children, correct labeling, PPE for handling, safe fuel storage, keeping chemicals in original containers, and safe disposal.',zd5:'14 checks: grain bin and silo engulfment awareness, barn loft and hayloft fall risks, ladder safety, overhead power line awareness near tall equipment, and structural fall hazards around the property.',zd6:'14 checks: awareness that emergency response times may be longer in rural areas, a well-stocked first aid kit suited to rural risks, fire risk awareness, clear emergency vehicle access, communication planning for signal gaps, and a written emergency plan shared with the household.',critical:'Critical',high:'High',medium:'Medium',low:'Low',legendCritical:'Critical = immediate action',legendHigh:'High = urgent attention',noResults:'No checks match your search. Try different keywords.',searchPh:'Search checks… e.g. PTO shaft, pond fencing, grain bin, chemical storage, well cover, kick zone…',who:'Who',what:'What',where:'Where',why:'Why',how:'How',standards:'Standards &amp; Measurements',example:'Real-World Example',quickTip:'Quick Win',markAll:'Mark All Complete',unmarkAll:'Unmark All',expandAll:'Expand All',collapseAll:'Collapse All',celebrate:'All 84 checks complete — you\'ve built strong, confident safety habits around machinery, water, animals and chemicals on your farm or rural property. Print your checklist to keep on hand.',collTitle:'The SafeLife Collection',collSub:'One safety system for every stage of life. Every module below is a complete, standalone 84-check system — available separately, or as the full bundle.',owned:'✓ Current Module',addon:'Available Separately',disclaimer:'This checklist is educational general farm and rural household safety guidance to help families build strong safety habits around machinery, water, animals and chemicals. It is not professional agricultural machinery operation training, veterinary guidance, or a substitute for local regulations. If you have concerns about specific machinery operation, animal handling, chemical use, or structural safety on your property, please consult a qualified agricultural safety professional, equipment manufacturer, or your local regulations.',manualTitle:'User Manual',cheatTitle:'Emergency Cheat Sheet',printTitle:'Print or Save as PDF',printHint:'Choose what to print. To save as a PDF instead of printing on paper, choose "Save as PDF" as the printer in the print dialog.',printZone:'Current zone only',printCheat2:'Cheat sheet',printAll:'Full checklist (all 84)',printCheat:'🖨️ Print cheat sheet',langNote:'Safety check content is written in English (verified international guidance). Interface labels switch language.',saved:'Progress saved',loaded:'Progress loaded',cheatContacts:'My emergency contacts',cheatHint:'Make it yours: edit any name or number, add or delete rows. Everything saves automatically on this device and prints on your cheat sheet.',addContact:'+ Add contact',myNotes:'My notes',notesPh:'Veterinarian details, fuel and utility account numbers, agricultural safety advisor, insurer, nearest neighbour, well and shutoff locations, useful notes…',rules:'The 10 golden rules',keyNums:'Key measurements at a glance',delRow:'Remove',notCovered:'Topic not covered in this module? Check the cheat sheet, ask a qualified professional, or request it via your SafeLife store page — new checks arrive in free updates.',printNote:'All checks are automatically expanded to full detail when printing — no need to open them first.',mn1:'Newborn',mn2:'Infant',mn3:'Toddler',mn4:'Preschooler',mn5:'School-Age',mn6:'Teenager',mn7:'Young Adult',mn8:'Adult',mn9:'Middle-Aged Adult',mn10:'Active Seniors',mn11:'Advanced Age',mn12:'90+ and Longevity',
+manualBody:'<h4>🚀 Getting started</h4><p>84 checks in 6 zones. Tap any check to see Who / What / Where / Why / How, exact measurements and standards, a real-world example and a quick-win tip.</p><h4>✅ Progress</h4><p>Tick the box to complete a check — bars and counters update instantly. Each zone has Mark All / Unmark All and Expand / Collapse All buttons, and the floating ↑ ↓ arrows jump between checks.</p><h4>🔍 Search &amp; filters</h4><p>The search box filters all 84 checks live across every zone. Tap a risk pill (Critical / High / Medium / Low) to filter by risk level; tap again to clear.</p><h4>🎨 Personalise</h4><p>Pick a colour theme and light or dark mode — remembered on this device. Make the cheat sheet yours: add your own emergency numbers and notes.</p><h4>🚜 A note on farm and rural life</h4><p>Raising a family on a farm or rural property is a rich, wonderful way of life, full of space, purpose and connection to the land — this checklist exists to help your family build strong safety habits around real, specific hazards, not to make you anxious about that life. Work through the zones at your own pace. Some checks, particularly around machinery, grain storage and chemical handling, describe general safety awareness rather than specific operating instructions — always follow your equipment manufacturer\'s guidance and seek hands-on training from a qualified agricultural safety professional.</p><h4>💾 Save &amp; 🖨️ Print</h4><p>Progress saves automatically on this device as you go. To move your progress to another device or keep a backup, tap 💾 Save — this downloads a small file. On the new device (or after clearing your browser), open the same checklist, tap 📂 Load, and choose that file to restore your progress exactly where you left off. Keep the file somewhere safe, like your email or a notes app. Print the full checklist, one zone, or your personalised cheat sheet — all checks expand automatically when printing. Choose "Save as PDF" in the print dialog to create a PDF.</p>'}
+};
+
+// ═══════════════════════════════════════════
+// TRADEMARK ICON SET — same outline family as the whole collection
+// ═══════════════════════════════════════════
+const _svg = inner => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">' + inner + '</svg>';
+const _farmruralIcon = '<circle cx="7" cy="18" r="3.2"/><circle cx="17.5" cy="18.5" r="2.2"/><path d="M9.5 16.5V10h4.5l3 3.5h2.5v4.5"/><path d="M14 10V6.5h2.5"/><path d="M9.5 12.5h4"/>';
+const ICONS = {
+  stage: _svg('<path d="M2.3 8.6c1.7-2.7 4.2-4.1 6.2-4.1s4.5 1.4 6.2 4.1c-1.7 2.7-4.2 4.1-6.2 4.1S4 11.3 2.3 8.6z"/><circle cx="8.5" cy="8.6" r="1.8"/><path d="M14.5 14.6q1.8 1.8 0 3.8M16.7 12.4q3.6 3.6 0 8.2M18.9 10.2q5.4 5.4 0 12.6"/><circle cx="13" cy="16.6" r="1" fill="currentColor" stroke="none"/>'),
+  farmrural: _svg(_farmruralIcon),
+  z1: _svg('<circle cx="7" cy="17" r="3"/><circle cx="17" cy="17" r="2"/><path d="M9.5 15V9h5l2.5 3h2v5"/><path d="M9.5 12h3"/>'),
+  z2: _svg('<path d="M3 15c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0"/><path d="M3 19c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0"/><path d="M6 11V5M6 5h3M12 11V5M12 5h3"/>'),
+  z3: _svg('<path d="M12 4.5c-3 0-4 2-4 3.8 0 .9.3 1.6.8 2.2L7 12l1.5 1.2c-.3.7-.5 1.5-.5 2.3 0 2.8 1.8 5 4 5s4-2.2 4-5c0-.8-.2-1.6-.5-2.3L17 12l-1.8-1.5c.5-.6.8-1.3.8-2.2 0-1.8-1-3.8-4-3.8z"/><circle cx="10" cy="12.5" r="0.6" fill="currentColor" stroke="none"/><circle cx="14" cy="12.5" r="0.6" fill="currentColor" stroke="none"/>'),
+  z4: _svg('<rect x="7" y="9" width="10" height="11" rx="1.5"/><path d="M9.5 9V6a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v3"/><path d="M9.5 14h5M12 12v4"/>'),
+  z5: _svg('<rect x="8" y="7" width="6" height="13" rx="3"/><path d="M8 11h6M8 15h6"/><path d="M16 5l3 2M19 7l2-1.3M19 7v3"/>'),
+  z6: _svg('<rect x="5" y="7" width="14" height="11" rx="2"/><path d="M9.5 7V5.5A1.5 1.5 0 0 1 11 4h2a1.5 1.5 0 0 1 1.5 1.5V7"/><path d="M12 10.5v5M9.5 13h5"/>'),
+  stages: [
+    _svg('<circle cx="12" cy="13" r="6.5"/><path d="M12 6.5c0-1.8.8-2.7 2.3-3"/><circle cx="9.7" cy="12.2" r="0.65" fill="currentColor" stroke="none"/><circle cx="14.3" cy="12.2" r="0.65" fill="currentColor" stroke="none"/><path d="M9.9 15c1.4 1.2 2.8 1.2 4.2 0"/>'),
+    _svg('<circle cx="12" cy="7" r="3.2"/><path d="M6.8 20.5v-3.2a5.2 5.2 0 0 1 10.4 0v3.2"/>'),
+    _svg('<path d="M12 3.5l2.5 5.2 5.7.8-4.1 4 1 5.7-5.1-2.7-5.1 2.7 1-5.7-4.1-4 5.7-.8z"/>'),
+    _svg('<rect x="6.5" y="8" width="11" height="12" rx="3"/><path d="M9.5 8V6.2a2.5 2.5 0 0 1 5 0V8"/><rect x="9.7" y="13" width="4.6" height="4" rx="1"/><path d="M6.5 11.5h11"/>'),
+    _svg('<path d="M5 15v-1.5a7 7 0 0 1 14 0V15"/><rect x="4" y="14" width="3.4" height="6" rx="1.6"/><rect x="16.6" y="14" width="3.4" height="6" rx="1.6"/>'),
+    _svg('<path d="M12 4.5L2.8 9l9.2 4.5L21.2 9z"/><path d="M6.8 11.5v3.8c0 1.6 10.4 1.6 10.4 0v-3.8"/><path d="M21.2 9v5"/>'),
+    _svg('<rect x="3.8" y="8" width="16.4" height="11.2" rx="2"/><path d="M9.5 8V6.6A1.6 1.6 0 0 1 11.1 5h1.8a1.6 1.6 0 0 1 1.6 1.6V8M3.8 12.8h16.4"/>'),
+    _svg('<path d="M8.5 9.5v-4c2.3 1.8 4.7 1.8 7 0v4a3.5 3.5 0 0 1-7 0z"/><path d="M12 13v8M12 18c-1.8-.4-3-1.4-3.6-3"/>'),
+    _svg('<circle cx="8.5" cy="5" r="2.1"/><path d="M8.5 7.1c-1.2.4-2 1.5-2 2.8v1.8"/><path d="M8.7 9.6c3.4 0 5.8 2.5 5.8 5.7 0 2.2-1.2 3.9-3 4.9"/><path d="M6.5 11.7v3.4c0 2.2 1 3.9 2.7 5"/>'),
+    _svg('<circle cx="12" cy="5.8" r="2.3"/><path d="M8.2 17.3a3.8 3.8 0 0 1 7.6 0v1.2"/><path d="M6.6 20.5h10.8"/><path d="M8.6 20.5v-3.2M15.4 20.5v-3.2"/><path d="M12 13.4c-.9-.8-1.5-1.3-1.5-1.9a.85.85 0 0 1 1.5-.55.85.85 0 0 1 1.5.55c0 .6-.6 1.1-1.5 1.9z"/>'),
+    _svg('<circle cx="7" cy="5.3" r="2.2"/><path d="M4 19v-3.4a3.4 3.4 0 0 1 3.4-3.4h.6a3.4 3.4 0 0 1 2.6 1.2l1 1.2"/><circle cx="17" cy="9.4" r="1.7"/><path d="M13.9 19v-2.4a2.6 2.6 0 0 1 2.6-2.6h1a2.6 2.6 0 0 1 2.6 2.6V19"/><path d="M9.5 15.3l2.7 1.4"/>'),
+    _svg('<path d="M6.4 8.1c-2.2 0-4 1.8-4 3.9s1.8 3.9 4 3.9c3.4 0 5.2-2.5 5.7-3.9.5-1.4 2.3-3.9 5.7-3.9 2.2 0 4 1.8 4 3.9s-1.8 3.9-4 3.9c-3.4 0-5.2-2.5-5.7-3.9-.5-1.4-2.3-3.9-5.6-3.9z"/>'),
+    _svg('<path d="M8.5 8.2V6.6a3.5 3.5 0 0 1 7 0v1.6"/><rect x="4.3" y="8.2" width="15.4" height="11.8" rx="3.6"/><path d="M4.3 13.2h15.4"/><rect x="10.4" y="10.6" width="3.2" height="2" rx="0.5"/>'),
+    _svg('<circle cx="7.8" cy="12" r="5.3"/><circle cx="16.2" cy="12" r="5.3"/><circle cx="6.3" cy="11.2" r="0.6" fill="currentColor" stroke="none"/><circle cx="9.3" cy="11.2" r="0.6" fill="currentColor" stroke="none"/><circle cx="14.7" cy="11.2" r="0.6" fill="currentColor" stroke="none"/><circle cx="17.7" cy="11.2" r="0.6" fill="currentColor" stroke="none"/><path d="M6.5 13.8c.9.7 1.8.7 2.7 0M14.9 13.8c.9.7 1.8.7 2.7 0"/>'),
+    _svg('<rect x="6" y="4.6" width="12" height="16.4" rx="2.2"/><path d="M9.4 4.6V3.7A1.7 1.7 0 0 1 11.1 2h1.8a1.7 1.7 0 0 1 1.7 1.7v.9"/><path d="M9 13.2l2.2 2.2L15.5 11"/>'),
+    _svg('<path d="M4 11.5l8-6.8 8 6.8"/><path d="M6.2 10.2V19a1 1 0 0 0 1 1h9.6a1 1 0 0 0 1-1v-8.8"/><path d="M9.4 19v-4.6h5.2V19"/><path d="M9 13l2.2 1.6 3.4-3"/>'),
+    _svg('<path d="M12 3v18"/><path d="M8 5h8"/><path d="M9.6 13h4.8"/>'),
+    _svg('<rect x="5" y="9.6" width="14" height="4.8" rx="2.4" transform="rotate(-38 12 12)"/><path d="M12 9.6v4.8" transform="rotate(-38 12 12)"/>'),
+    _svg('<circle cx="8.3" cy="15.5" r="5.1"/><circle cx="8.3" cy="15.5" r="0.9" fill="currentColor" stroke="none"/><path d="M8.3 15.5h7l2.7 3.6"/><path d="M8.3 10.6h4.8l1.7 4.9h3.5"/><circle cx="7.6" cy="5.6" r="1.7"/><path d="M7.6 7.3v2.2"/><circle cx="18.7" cy="19.3" r="1.3"/>'),
+    _svg('<path d="M2.3 8.6c1.7-2.7 4.2-4.1 6.2-4.1s4.5 1.4 6.2 4.1c-1.7 2.7-4.2 4.1-6.2 4.1S4 11.3 2.3 8.6z"/><circle cx="8.5" cy="8.6" r="1.8"/><path d="M14.5 14.6q1.8 1.8 0 3.8M16.7 12.4q3.6 3.6 0 8.2M18.9 10.2q5.4 5.4 0 12.6"/><circle cx="13" cy="16.6" r="1" fill="currentColor" stroke="none"/>'),
+    _svg('<path d="M12 19.4c-2.7-1.9-4.7-3.5-4.7-5.5a2.6 2.6 0 0 1 4.7-1.6 2.6 2.6 0 0 1 4.7 1.6c0 2-2 3.6-4.7 5.5z"/><circle cx="7.4" cy="8.2" r="1.6"/><circle cx="10.3" cy="5.6" r="1.6"/><circle cx="13.7" cy="5.6" r="1.6"/><circle cx="16.6" cy="8.2" r="1.6"/>'),
+    _svg(_farmruralIcon)
+  ]
+};
+function injectIcons(){
+  document.getElementById('logo-icon').innerHTML = ICONS.stage;
+  document.getElementById('hero-icon').innerHTML = ICONS.farmrural;
+  document.querySelectorAll('.zic[data-zi]').forEach(el=>{ el.innerHTML = ICONS[el.dataset.zi] || ''; });
+}
+// ═══════════════════════════════════════════
+// ALL 84 CHECKS — FARM & RURAL HOUSEHOLD
+// ═══════════════════════════════════════════
+const ZONES = [
+  {
+    id: 1, name: 'Machinery & Vehicle Safety', icon: '🚜',
+    desc: '14 checks: tractors, ATVs/quad bikes, PTO shaft guarding, mowers, keeping children away from moving machinery, safe start-up and shutdown habits, and rollover awareness.',
+    checks: [
+      { id:'fr01', num:'FR01', risk:'critical', title:'Checking PTO Shaft Guards Are Present and Intact Before Every Use',
+        who:'Anyone who operates or works near power take-off (PTO) driven equipment',
+        what:'A PTO shaft guard that is missing, cracked, or not spinning freely, or an operator relying on the shaft\'s outer shield without checking it',
+        where:'Any point where a tractor\'s PTO shaft connects to towed or driven equipment',
+        why:'A PTO shaft can entangle loose clothing, hair, or a limb in a fraction of a second, and this is one of the most serious and well-documented mechanical hazards on any farm',
+        how:'Visually and physically check that the PTO shaft guard is present, undamaged, and rotates freely around the shaft before starting any PTO-driven equipment, and replace or repair any damaged guard before use',
+        measurement:'General agricultural machinery safety guidance, comparable to established occupational farm-safety frameworks, identifies an intact, freely rotating PTO shield as essential before operation, with entanglement occurring in a fraction of a second.',
+        example:'Before hitching a mower to the tractor, a farming parent walks the length of the PTO shaft, confirms the guard spins independently of the shaft, and tapes down a loose flap on the shield before starting up.',
+        tip:'If a PTO guard has ever been removed for repair, treat that as an immediate reminder to reinstall and check it before the equipment is used again — a missing guard is one of the easiest hazards to overlook after maintenance.' },
+
+      { id:'fr02', num:'FR02', risk:'high', title:'Keeping Children and Bystanders Clear of Moving Machinery',
+        who:'Every adult supervising children on a working farm or rural property',
+        what:'Children playing or wandering near operating machinery, or riding along on equipment not designed to carry passengers',
+        where:'Anywhere machinery is being started, operated, loaded, or moved',
+        why:'Moving machinery often has significant blind spots, and a child can be out of a driver\'s sightline in the time it takes to glance away',
+        how:'Establish a clear household rule that children stay a marked, agreed distance from any machinery in operation, and never allow a child to ride on equipment that is not fitted with an approved passenger seat',
+        measurement:'Recognised agricultural safety guidance identifies keeping bystanders, especially children, outside a defined safe zone during machinery operation as a fundamental control.',
+        example:'A family agrees that their children wait behind the farmhouse gate whenever the tractor is running in the yard, rather than nearby where blind spots are greatest.',
+        tip:'Make the "safe zone" rule visual and consistent — a specific gate, fence line or marker children learn to recognise is easier to enforce than a vague instruction.' },
+
+      { id:'fr03', num:'FR03', risk:'high', title:'Age-Appropriate ATV/Quad Bike Use and Helmet Wear',
+        who:'Any household member who rides an ATV or quad bike',
+        what:'A rider using a machine sized for an adult, or riding without a properly fitted helmet',
+        where:'Wherever ATVs or quad bikes are used on the property',
+        why:'ATVs are a leading cause of serious rural injury, and machine size mismatched to a rider\'s age or weight substantially increases rollover and control risk',
+        how:'Match the ATV size to the rider\'s age, size, and experience following the manufacturer\'s guidance, require a properly fitted helmet on every ride, and provide supervised training before any young or new rider operates independently',
+        measurement:'Recognised ATV safety guidance recommends age- and size-appropriate machines, mandatory helmet use, and no passengers on single-rider models.',
+        example:'A family keeps their teenager on a smaller, youth-rated ATV rather than the adult-sized model, and helmets are kept by the door as a non-negotiable habit before every ride.',
+        tip:'Treat the helmet rule the same way you would a car seatbelt — automatic, every single time, regardless of how short the ride will be.' },
+
+      { id:'fr04', num:'FR04', risk:'high', title:'Safe Start-Up and Shutdown Habits for All Machinery',
+        who:'Anyone operating tractors, mowers, or other powered farm equipment',
+        what:'Leaving machinery running and unattended, or failing to engage the parking brake and remove the key before dismounting',
+        where:'Anywhere machinery is started, paused, or parked',
+        why:'Unattended running machinery, or equipment left in gear, can move unexpectedly or be started by a child, creating a serious and preventable hazard',
+        how:'Build a consistent habit of engaging the parking brake, placing the machine in neutral or park, and removing the key any time the operator steps away, even briefly',
+        measurement:'Recognised agricultural machinery safety guidance identifies securing machinery before leaving the operator\'s seat as a basic, non-negotiable habit.',
+        example:'A farming parent removes the tractor key and pockets it every time they hop down to open a gate, rather than leaving the engine running "just for a minute."',
+        tip:'Make key removal part of the same physical motion as switching off the engine, so it becomes automatic rather than an extra step to remember.' },
+
+      { id:'fr05', num:'FR05', risk:'high', title:'Rollover Awareness and Seatbelt Use with ROPS-Equipped Tractors',
+        who:'Tractor operators',
+        what:'Operating a tractor on sloped or uneven ground without using the seatbelt, on equipment fitted with a rollover protective structure (ROPS)',
+        where:'Sloped, uneven, or soft ground anywhere on the property',
+        why:'ROPS-equipped tractors are only fully effective at protecting the operator when combined with seatbelt use, and rollovers remain one of the most serious causes of farm fatality',
+        how:'Always wear the seatbelt when operating a ROPS-equipped tractor, reduce speed on slopes and uneven terrain, and avoid operating close to ditches, embankments, or steep grades where rollover risk is highest',
+        measurement:'Recognised agricultural safety guidance identifies ROPS combined with seatbelt use as a proven, well-established control against rollover fatality.',
+        example:'A farming parent slows down and shifts to a wider, flatter route rather than crossing a steep bank directly, and buckles the seatbelt as an automatic habit before starting the engine.',
+        tip:'If your tractor does not have ROPS fitted, treat retrofitting one as a high priority — it is one of the most effective single upgrades for operator safety.' },
+
+      { id:'fr06', num:'FR06', risk:'medium', title:'Clearing the Area Before Mowing and Checking Blades',
+        who:'Anyone operating a mower, brush cutter, or similar blade equipment',
+        what:'Mowing over an area without first checking for debris, tools, or children\'s toys that could be thrown by the blades',
+        where:'Any area being mowed or cleared with blade equipment',
+        why:'Mower blades can throw debris at high speed over a significant distance, creating a serious risk to anyone nearby, including the operator',
+        how:'Walk the area to be mowed beforehand and remove sticks, stones, and other debris, and keep children and pets well clear of the mowing area until work is finished',
+        measurement:'Recognised mower safety guidance identifies a pre-mowing debris check and a clear surrounding area as basic controls against thrown-object injury.',
+        example:'Before mowing near the house, a parent does a quick sweep for garden toys and stray branches, then asks children to stay inside until the mowing is finished.',
+        tip:'Treat blade equipment the same way you would a power tool — switch it off completely before making any adjustment or clearing a jam, never while it is still running.' },
+
+      { id:'fr07', num:'FR07', risk:'medium', title:'Never Carrying Passengers on Equipment Not Designed for Them',
+        who:'Every household member and visitor',
+        what:'Riding along on a tractor, mower, or other single-operator equipment as a passenger, including children "along for the ride"',
+        where:'Anywhere machinery is operated on the property',
+        why:'Equipment designed for a single operator has no safe seating or restraint for an additional rider, and falls from moving machinery are a well-documented cause of serious injury',
+        how:'Set a firm household rule that no one rides on machinery unless it has a manufacturer-approved passenger seat and restraint, without exception for short distances',
+        measurement:'Recognised agricultural safety guidance identifies extra riders on single-operator machinery as a leading, preventable cause of serious injury, particularly to children.',
+        example:'A child who wants to "help" is given a job waiting at the gate instead of climbing up beside a parent on the tractor for a short trip across the yard.',
+        tip:'Make the rule apply even for very short distances — most extra-rider injuries happen on short, familiar trips where caution relaxes.' },
+
+      { id:'fr08', num:'FR08', risk:'medium', title:'Routine Inspection of PTO Shielding and Machine Guards',
+        who:'The household member responsible for machinery upkeep',
+        what:'Guards and shields left off after maintenance, or gradually loosened through regular use, without a routine check to catch this',
+        where:'All powered machinery with moving parts, belts, chains, or shafts',
+        why:'Guards are frequently removed for maintenance and not always replaced immediately, and a regular inspection habit catches this before the equipment is used again',
+        how:'Build a habit of checking that every guard, shield, and cover is correctly fitted before each significant use, particularly after any maintenance or repair work',
+        measurement:'Recognised machinery safety guidance recommends a routine guard check as part of standard pre-use inspection, especially after servicing.',
+        example:'After replacing a belt on the baler, a family member does a full guard check before running the machine again, catching a shield that had been left loosely fitted.',
+        tip:'Keep a simple laminated pre-use checklist near frequently used equipment as a visual reminder of what to check.' },
+
+      { id:'fr09', num:'FR09', risk:'medium', title:'Using a Spotter for Reversing and Working Near Blind Spots',
+        who:'Anyone reversing or manoeuvring machinery near buildings, animals, or other people',
+        what:'Reversing large machinery without checking mirrors or blind spots, particularly around buildings, animal pens, or where children may be present',
+        where:'Yards, near buildings, and around confined machinery movement areas',
+        why:'Large machinery has substantial blind spots directly behind and to the sides, and a spotter significantly reduces the risk of an unseen person or animal being struck',
+        how:'Use a second person as a spotter when reversing or manoeuvring in tight or busy areas, and establish a clear hand signal or communication method between operator and spotter',
+        measurement:'Recognised agricultural safety guidance identifies spotter use in blind-spot-heavy manoeuvres as an effective, low-cost control.',
+        example:'When backing a trailer into the barn, one family member spots from a safe visible position while the other operates, using an agreed hand signal to stop.',
+        tip:'Agree on the spotter\'s signals before starting, not mid-manoeuvre, so there is no confusion about what a raised hand or a shout means.' },
+
+      { id:'fr10', num:'FR10', risk:'medium', title:'Keeping the Machinery Maintenance Area Organised and Clear',
+        who:'The household member responsible for equipment upkeep',
+        what:'Tools, parts, and fuel containers left scattered around a maintenance or workshop area',
+        where:'Workshop, machinery shed, or maintenance area',
+        why:'A cluttered maintenance area increases trip hazards and makes it harder to notice a genuine hazard, such as a fuel spill, among general mess',
+        how:'Keep the maintenance area organised, store tools in a consistent place, and clean up spills or clutter promptly after each session',
+        measurement:'Recognised workshop safety guidance identifies an organised, clutter-free maintenance area as a basic control against trip and slip hazards.',
+        example:'A family keeps a designated pegboard for commonly used tools in the machinery shed, making it easy to spot when something is missing or left out.',
+        tip:'A five-minute tidy-up at the end of each maintenance session prevents clutter from building up into a genuine hazard over time.' },
+
+      { id:'fr11', num:'FR11', risk:'low', title:'Wearing High-Visibility Clothing Near Operating Machinery',
+        who:'Anyone working in or walking through active machinery areas',
+        what:'Dark or low-visibility clothing worn while working near tractors, loaders, or other machinery with limited operator visibility',
+        where:'Yards, fields, and any area where machinery is actively operating',
+        why:'High-visibility clothing makes a person more likely to be seen by a machine operator, particularly in low light, dust, or from a machine\'s blind spots',
+        how:'Keep at least one high-visibility vest or item per household member working near machinery, and wear it whenever moving through active work areas',
+        measurement:'Recognised workplace visibility guidance identifies high-visibility clothing as a simple, effective control in any area shared with moving machinery.',
+        example:'A teenager helping with fieldwork keeps a bright vest by the back door and puts it on automatically before heading out to the yard during harvest.',
+        tip:'Keep high-visibility items somewhere genuinely convenient, like by the door used most often — a rule that is inconvenient to follow rarely gets followed.' },
+
+      { id:'fr12', num:'FR12', risk:'medium', title:'Tying Back Loose Clothing and Hair Near Moving Parts',
+        who:'Anyone working near belts, shafts, chains, or other moving machinery parts',
+        what:'Loose clothing, dangling drawstrings, jewellery, or untied long hair worn while working near moving machine parts',
+        where:'Anywhere with exposed belts, shafts, chains, or rotating equipment',
+        why:'Loose items can catch in moving parts in an instant, and this is a well-documented and entirely preventable cause of entanglement injury',
+        how:'Tie back long hair, remove loose jewellery, and avoid clothing with dangling drawstrings or loose cuffs before working near any moving machine part',
+        measurement:'Recognised machinery safety guidance identifies loose clothing and hair as a leading avoidable entanglement risk near moving parts.',
+        example:'Before helping with a repair near the baler\'s belt drive, a family member ties back long hair and removes a loose scarf as an automatic habit.',
+        tip:'Make this a "before you start" ritual every time, not just when something feels obviously risky — entanglement hazards are not always visually obvious.' },
+
+      { id:'fr13', num:'FR13', risk:'medium', title:'Keeping Bystanders at a Safe Distance During Loading and Unloading',
+        who:'Everyone present during livestock, equipment, or material loading',
+        what:'People standing too close during trailer loading, equipment transport, or livestock movement',
+        where:'Loading ramps, trailers, and yard areas used for loading',
+        why:'Loading and unloading involves unpredictable movement from animals or shifting loads, and bystanders too close are at higher risk of being struck or crushed',
+        how:'Establish a clear, agreed distance for bystanders during any loading or unloading activity, and assign one person to manage the process while others stay clear',
+        measurement:'Recognised agricultural safety guidance identifies a defined bystander exclusion zone during loading operations as a basic control.',
+        example:'While loading cattle into a trailer, children and visitors wait behind the yard fence rather than near the ramp, where a sudden animal movement could be dangerous.',
+        tip:'Treat loading and unloading as a task with one clear leader directing the process, so everyone else knows to stay back and follow instructions.' },
+
+      { id:'fr14', num:'FR14', risk:'low', title:'Following a Simple Pre-Use Walk-Around Checklist for Machinery',
+        who:'Anyone about to operate significant farm machinery',
+        what:'Starting up machinery without a quick visual and functional check beforehand',
+        where:'Wherever machinery is stored or about to be used',
+        why:'A brief pre-use walk-around catches simple issues, such as a loose guard, low fluid, or a nearby hazard, before they become a problem during operation',
+        how:'Build a habit of a short walk-around checking guards, fluid levels, tyres, and the immediate surrounding area before starting any significant piece of machinery',
+        measurement:'Recognised agricultural machinery guidance recommends a brief, consistent pre-use inspection as standard practice before operation.',
+        example:'A farming parent does a thirty-second walk-around the tractor each morning before starting the engine, catching a low tyre before it becomes a bigger issue mid-task.',
+        tip:'Keep the checklist short and consistent so it is quick enough to actually happen every time, rather than being skipped when in a hurry.' }
+    ]
+  },
+  {
+    id: 2, name: 'Open Water & Drowning Prevention', icon: '💧',
+    desc: '14 checks: ponds, dams, irrigation channels, water troughs, wells, slurry/effluent pits, and fencing and barrier awareness around water features.',
+    checks: [
+      { id:'fr15', num:'FR15', risk:'high', title:'Fencing and Barrier Safety Around Ponds and Dams',
+        who:'Households with a pond, dam, or other open water feature on the property',
+        what:'A pond or dam without a secure barrier, particularly where young children are present',
+        where:'Any pond, dam, or open water feature',
+        why:'Open water is a serious and well-documented drowning risk for young children, and a secure barrier is one of the most effective controls available',
+        how:'Install a secure fence with a self-closing, self-latching gate around any pond or dam, following common child-safety barrier guidance for height and gap spacing',
+        measurement:'Recognised child-safety guidance for water features recommends barrier fencing generally at least approximately 1.2 m [4 ft] high, with gaps no wider than approximately 10 cm [4 in], and a self-closing, self-latching gate.',
+        example:'A family fences their farm pond with a securely latched gate before their toddler begins exploring the yard independently, rather than relying on supervision alone.',
+        tip:'A barrier is a backup to supervision, not a replacement for it — use both together rather than treating either alone as sufficient.' },
+
+      { id:'fr16', num:'FR16', risk:'critical', title:'Constant, Uninterrupted Supervision of Young Children Near Any Open Water',
+        who:'Any adult supervising young children on a property with open water',
+        what:'A young child left unsupervised, even briefly, near a pond, dam, channel, trough, or other open water',
+        where:'Any open water feature on the property',
+        why:'Young children can drown silently and in a matter of seconds, in very little water, which is why constant, undistracted supervision is the single most important control near any open water',
+        how:'Designate one adult as the active supervisor whenever children are near open water, keeping them within arm\'s reach of young children and free of distractions such as phones or other tasks',
+        measurement:'Recognised child-safety guidance identifies constant, undistracted adult supervision as the primary control around any open water, regardless of barriers or the water\'s apparent depth.',
+        example:'At a family gathering near the farm pond, one adult is specifically assigned as "water watcher" with no other task, rotating with another adult every twenty minutes.',
+        tip:'A visible signal, like a designated "water watcher" wearing a bright item, makes it obvious to everyone who is actively supervising at any given moment.' },
+
+      { id:'fr17', num:'FR17', risk:'high', title:'Fencing or Restricting Access to Irrigation Channels',
+        who:'Households with irrigation channels on the property',
+        what:'An open irrigation channel with fast-moving or deep water and no barrier or restricted access',
+        where:'Irrigation channels and ditches',
+        why:'Irrigation channels can have deceptively strong currents and steep, slippery banks, creating a drowning and entrapment risk that is easy to underestimate',
+        how:'Fence or clearly mark restricted access to irrigation channels, particularly sections near the home or play areas, and teach children to treat them as off-limits without adult supervision',
+        measurement:'Recognised rural water-safety guidance identifies moving water in channels and ditches as carrying additional current and entrapment risk beyond still water.',
+        example:'A family fences the section of irrigation channel closest to the house and teaches children it is strictly off-limits without an adult present.',
+        tip:'Even a channel that looks shallow can have a strong current — treat "looks safe" as an unreliable guide near any moving water.' },
+
+      { id:'fr18', num:'FR18', risk:'high', title:'Securing or Covering Water Troughs',
+        who:'Households with livestock water troughs',
+        what:'A water trough at a height or depth that a small child could fall into and be unable to climb out of',
+        where:'Livestock water troughs throughout the property',
+        why:'A trough deep enough for livestock is also deep enough to pose a real drowning risk to a small child who falls in and cannot climb out',
+        how:'Where possible, position troughs away from areas young children access unsupervised, use troughs with sides low enough to climb out of or add an escape ramp, and supervise children closely near any trough',
+        measurement:'Recognised rural child-safety guidance identifies livestock water troughs as a genuine drowning risk warranting placement and supervision consideration, similar to any other open water.',
+        example:'A family adds a simple wooden escape ramp inside a large water trough after realising a fallen animal or small child would otherwise struggle to climb out.',
+        tip:'Walk your property specifically looking at troughs from a small child\'s height and perspective — what looks obviously safe from adult height can look very different lower down.' },
+
+      { id:'fr19', num:'FR19', risk:'high', title:'Keeping Wells Securely Covered and Locked',
+        who:'Households with a well on the property, in use or disused',
+        what:'A well cover that is missing, damaged, or not securely fastened',
+        where:'Every well on the property, including disused ones',
+        why:'An open or poorly secured well presents a serious fall and drowning risk, and disused wells are particularly easy to forget about once they are no longer in daily use',
+        how:'Ensure every well has a secure, load-bearing cover that is properly fastened, and treat any disused well with the same seriousness as an active one until it has been properly capped or filled',
+        measurement:'Recognised rural safety guidance identifies securely covered or capped wells as an essential control against fall and drowning risk, particularly for disused wells that are easy to overlook.',
+        example:'A family locates a disused well at the edge of their property, overgrown and easy to miss, and arranges for it to be properly capped rather than leaving the old cover in place.',
+        tip:'Walk the full perimeter of your property specifically looking for old or disused wells — these are the ones most likely to be forgotten and least likely to have a secure modern cover.' },
+
+      { id:'fr20', num:'FR20', risk:'high', title:'Securing Slurry and Effluent Pits with Fencing and Covers',
+        who:'Households with slurry or effluent storage on the property',
+        what:'A slurry or effluent pit without secure fencing or a proper cover',
+        where:'Slurry pits, effluent lagoons, and similar storage areas',
+        why:'Slurry and effluent pits combine a serious drowning risk with the release of dangerous gases, making them among the most hazardous features on any farm',
+        how:'Keep slurry and effluent pits securely fenced and covered at all times, restrict access to trained adults only, and never allow children near them under any circumstances',
+        measurement:'Recognised agricultural safety guidance identifies slurry and effluent storage as a combined drowning and toxic-gas hazard requiring secure fencing and strictly controlled access.',
+        example:'A family fences their slurry pit with a locked gate, treating it as entirely off-limits to children and unsupervised visitors at all times.',
+        tip:'Because slurry pits also carry a gas risk, treat any accidental fall into one as an emergency requiring immediate professional help, not a situation to handle alone.' },
+
+      { id:'fr21', num:'FR21', risk:'medium', title:'Keeping Life Jackets or Ring Buoys Near Larger Water Bodies',
+        who:'Households with a larger pond, dam, or natural water feature',
+        what:'No life-saving equipment kept near a larger body of water on the property',
+        where:'Larger ponds, dams, or natural water features',
+        why:'Quick access to a ring buoy or throw line can make a critical difference in an emergency, giving a rescuer a way to help without entering the water themselves',
+        how:'Keep a ring buoy or throw line mounted visibly near any larger water feature, and make sure household members know how to use it',
+        measurement:'Recognised water-safety guidance recommends visible, accessible rescue equipment near any substantial open water feature.',
+        example:'A family mounts a ring buoy on a post near their farm dam, visible from the house, alongside a simple sign showing how to use it.',
+        tip:'A "reach, throw, don\'t go" approach — reaching or throwing something rather than entering the water yourself — keeps a rescuer safer while still helping quickly.' },
+
+      { id:'fr22', num:'FR22', risk:'medium', title:'Clear Signage at Hazardous Water Features',
+        who:'Households and visitors to the property',
+        what:'A hazardous water feature with no visible warning for visitors, contractors, or children unfamiliar with the property',
+        where:'Ponds, dams, channels, pits, and wells',
+        why:'Visitors and children unfamiliar with a property will not know which water features are hazardous unless it is made clear, and simple signage closes that gap',
+        how:'Post clear, simple signs at hazardous water features, particularly slurry pits, deep ponds, and wells, so anyone unfamiliar with the property understands the risk immediately',
+        measurement:'Recognised rural safety guidance identifies clear signage at hazardous features as a low-cost, effective control for visitors and children unfamiliar with the property.',
+        example:'A family adds a simple sign at their pond gate reading that children must be supervised at all times, ensuring visiting relatives understand the expectation immediately.',
+        tip:'Keep signage simple and visual rather than wordy — a clear symbol is understood faster than a paragraph of text.' },
+
+      { id:'fr23', num:'FR23', risk:'medium', title:'Checking That Barrier Gates Self-Close and Self-Latch',
+        who:'Households relying on fencing around water features',
+        what:'A barrier gate that does not close and latch automatically, relying instead on someone remembering to shut it every time',
+        where:'Gates on fencing around any water feature',
+        why:'A gate that depends on someone remembering to close it will eventually be left open, while a self-closing, self-latching gate removes that dependence on memory',
+        how:'Test that every barrier gate around water features closes and latches automatically without being pushed shut manually, and repair or upgrade any that do not',
+        measurement:'Recognised child-safety barrier guidance recommends self-closing, self-latching gates as significantly more reliable than manually closed gates.',
+        example:'A family upgrades their pond gate hinge to a self-closing spring mechanism after noticing it had been left ajar following a visitor\'s departure.',
+        tip:'Test the gate yourself by walking through and letting go, exactly as a distracted visitor or older child might, to confirm it genuinely closes on its own.' },
+
+      { id:'fr24', num:'FR24', risk:'low', title:'Teaching Age-Appropriate Water Safety Rules to Children',
+        who:'Households raising children on a property with open water',
+        what:'Children who have not been taught clear, age-appropriate rules about open water on the property',
+        where:'Applies to the whole property',
+        why:'Clear, consistently reinforced rules give children an understanding of water hazards appropriate to their age, complementing supervision and barriers rather than replacing them',
+        how:'Teach children specific, simple rules about open water — such as never approaching alone — appropriate to their age and reinforce them regularly and calmly',
+        measurement:'Recognised child-safety guidance identifies age-appropriate water safety education as a complement to, not a replacement for, supervision and barriers.',
+        example:'A family calmly explains their "never near the pond without an adult" rule to their children in simple terms, repeating it regularly rather than assuming it is understood after one conversation.',
+        tip:'Reinforce the rule during calm moments, not just after a near-miss, so children understand it as a normal part of life on the property rather than something frightening.' },
+
+      { id:'fr25', num:'FR25', risk:'medium', title:'Keeping Rescue Equipment Accessible Near Water Features',
+        who:'Households responsible for water feature safety',
+        what:'Rescue equipment, if present, stored somewhere not quickly accessible in an emergency',
+        where:'Near ponds, dams, and other significant water features',
+        why:'In a water emergency, seconds matter, and equipment that is not immediately accessible loses much of its value',
+        how:'Store any rescue equipment, such as a ring buoy or reaching pole, in a fixed, visible, unlocked location directly at the water feature rather than in a shed or store room',
+        measurement:'Recognised water-safety guidance recommends rescue equipment stored directly at the point of risk, not in a separate, less accessible location.',
+        example:'A family moves their throw line from the garden shed to a mounted bracket directly beside the dam, cutting the time it would take to reach it in an emergency.',
+        tip:'Check periodically that rescue equipment is still in place and in good condition — weather and general wear can affect stored equipment over time.' },
+
+      { id:'fr26', num:'FR26', risk:'medium', title:'Removing or Draining Unnecessary Standing Water',
+        who:'The household managing yard and outbuilding areas',
+        what:'Buckets, containers, or old troughs left holding standing water unnecessarily',
+        where:'Yards, sheds, and storage areas',
+        why:'Even a small container of standing water can pose a drowning risk to a very young child, and removing unnecessary standing water eliminates the hazard entirely',
+        how:'Regularly check the property for buckets, containers, or unused troughs holding standing water, and empty or remove them when not actively needed',
+        measurement:'Recognised child-safety guidance identifies removing unnecessary standing water as an effective, low-cost control, particularly relevant to households with toddlers.',
+        example:'A family empties a rainwater-filled bucket left beside the shed after realising their toddler had started exploring that area of the yard.',
+        tip:'Make checking for standing containers part of a regular yard walk-around, since new ones can appear quickly after rain.' },
+
+      { id:'fr27', num:'FR27', risk:'low', title:'Seasonal Awareness of Water Hazard Changes',
+        who:'The household managing property safety through the year',
+        what:'Water hazards that change with the seasons, such as flooding, ice, or rising water levels, not reassessed as conditions change',
+        where:'Any water feature affected by seasonal conditions',
+        why:'A water feature that is manageable in one season can become significantly more hazardous in another, such as ice forming or water levels rising after heavy rain',
+        how:'Reassess water hazards at each significant seasonal change, adjusting supervision, barriers, or access restrictions as conditions change',
+        measurement:'Recognised rural safety guidance recommends reassessing water hazards seasonally rather than relying on a single, one-time assessment.',
+        example:'A family tightens supervision rules around their pond after a period of heavy rain raises the water level noticeably higher than usual.',
+        tip:'A quick seasonal walk-around, timed with an obvious marker like the first frost or first heavy rain, is an easy way to remember to reassess.' },
+
+      { id:'fr28', num:'FR28', risk:'medium', title:'Briefing Visitors and Guests on Water Hazards',
+        who:'Households hosting visitors, particularly with children',
+        what:'Visitors unfamiliar with the property\'s water hazards left to discover them without a briefing',
+        where:'Applies to the whole property when visitors are present',
+        why:'A visitor unfamiliar with a rural property will not know which water features are hazardous unless told directly, and a brief conversation closes this gap quickly',
+        how:'Give visitors, especially those with children, a short verbal briefing on the property\'s water hazards and any rules before children are allowed to explore unsupervised',
+        measurement:'Recognised rural safety guidance identifies a brief visitor safety briefing as an effective, low-cost control for hazards unfamiliar to non-residents.',
+        example:'Before a family gathering, the hosts give visiting relatives a two-minute rundown of where the pond and irrigation channel are before children are let outside.',
+        tip:'Keep the briefing short, calm and specific rather than alarming — a clear, matter-of-fact tone is more likely to be remembered and followed.' }
+    ]
+  },
+  {
+    id: 3, name: 'Livestock & Large Animal Safety', icon: '🐄',
+    desc: '14 checks: safe handling distances, kick and goring zones, keeping a clear escape route near animals, calm handling habits, keeping children at a safe distance, and awareness of protective new-mother animal behaviour.',
+    checks: [
+      { id:'fr29', num:'FR29', risk:'critical', title:'Understanding and Respecting Kick and Goring Zones',
+        who:'Anyone handling or working near horses, cattle, or other large livestock',
+        what:'Standing within an animal\'s kick or goring range without awareness, particularly approaching from behind or the side unexpectedly',
+        where:'Anywhere large livestock are present, including pens, pastures, and handling areas',
+        why:'A kick or goring strike from a large animal can cause serious injury in an instant, and understanding an animal\'s typical range and blind spots is one of the most important protective habits in animal handling',
+        how:'Learn the typical kick and goring range of the animals you keep, approach animals from the front or side where they can see you, speak calmly to announce your presence, and avoid standing directly behind or too close to the head of a horned animal',
+        measurement:'Recognised livestock handling guidance identifies staying outside an animal\'s kick zone — generally an arc extending roughly 2 m [6-7 ft] behind and to the side — as a fundamental safety practice.',
+        example:'A farming parent always calls out and approaches a horse from the side, in its line of sight, rather than walking up quietly from behind.',
+        tip:'Animals startle at sudden, unexpected contact more than at your presence itself — a calm voice as you approach gives the animal time to register you are there.' },
+
+      { id:'fr30', num:'FR30', risk:'high', title:'Keeping a Clear Escape Route When Working Near Animals',
+        who:'Anyone working in pens, stalls, or enclosed spaces with livestock',
+        what:'Working in a confined space with an animal without a planned, unobstructed way out',
+        where:'Pens, stalls, chutes, and other confined livestock handling areas',
+        why:'A confined space limits your ability to move away quickly if an animal becomes startled or aggressive, and a planned escape route reduces the time it takes to get clear',
+        how:'Before entering any confined space with an animal, identify and keep clear at least one unobstructed escape route, and avoid working in a space with only one way in and out where possible',
+        measurement:'Recognised livestock handling guidance identifies a planned, unobstructed escape route as a core safety practice when working in confined animal spaces.',
+        example:'Before treating a cow in a narrow stall, a farmhand checks that the gate behind them is unlatched and clear, rather than closed and blocked by equipment.',
+        tip:'Get in the habit of glancing for your escape route the moment you enter any pen or stall, before starting the task at hand, not after something goes wrong.' },
+
+      { id:'fr31', num:'FR31', risk:'high', title:'Awareness of Protective Behaviour in New-Mother Animals',
+        who:'Anyone approaching livestock that have recently given birth',
+        what:'Approaching a new mother animal and her offspring without extra caution, assuming the animal will behave as it normally does',
+        where:'Anywhere new-mother animals and their young are kept',
+        why:'Animals that have recently given birth are often significantly more protective and can behave unpredictably or aggressively toward perceived threats, including familiar handlers',
+        how:'Approach new-mother animals and their young with extra caution and a wider safety margin than usual, and keep children well away from this pairing entirely until the animal has settled',
+        measurement:'Recognised livestock handling guidance identifies protective maternal behaviour as a well-documented, temporary increase in unpredictability requiring additional caution.',
+        example:'A family keeps children away from a recently calved cow and her calf for the first weeks, even though the same cow is normally calm and approachable.',
+        tip:'Protective behaviour can persist for longer than expected — continue extra caution for some time after birth rather than assuming it ends quickly.' },
+
+      { id:'fr32', num:'FR32', risk:'high', title:'Keeping Children a Safe Distance from Large Animals',
+        who:'Adults supervising children around livestock',
+        what:'Children allowed close to large livestock without supervision or a clear understanding of safe distance',
+        where:'Pastures, pens, and any area where large animals are present',
+        why:'Children are less able to read animal body language and react quickly, and a safe distance rule significantly reduces the risk of an unexpected kick, charge, or trample',
+        how:'Establish a clear, consistently enforced safe distance for children around large livestock, and ensure any closer contact happens only with direct adult supervision and a calm, familiar animal',
+        measurement:'Recognised child-safety guidance around livestock recommends a clearly defined and consistently enforced safe distance, with closer contact only under direct supervision.',
+        example:'Children are taught to watch livestock from outside the pen fence rather than entering, with closer contact only happening during supervised feeding with a parent present.',
+        tip:'Make the safe-distance rule visual, such as "stay on this side of the fence," rather than an abstract distance that is harder for a young child to judge.' },
+
+      { id:'fr33', num:'FR33', risk:'high', title:'Calm, Predictable Animal-Handling Habits',
+        who:'Anyone handling livestock regularly',
+        what:'Sudden movements, loud noises, or unpredictable handling that can startle an animal',
+        where:'Anywhere livestock are handled',
+        why:'Large animals respond to sudden or unexpected stimuli with a flight or defensive response, and calm, predictable handling significantly reduces the chance of a startled reaction',
+        how:'Move slowly and predictably around livestock, speak in a calm, steady voice, and avoid sudden loud noises or quick movements, particularly when approaching or working close to an animal',
+        measurement:'Recognised livestock handling guidance identifies calm, predictable handling as a proven method for reducing startled or defensive animal responses.',
+        example:'A farming parent moves slowly and talks quietly while leading a horse out of the stable, rather than rushing or making sudden gestures.',
+        tip:'If an animal seems unusually tense or alert, pause and give it a moment before continuing, rather than pushing through the interaction quickly.' },
+
+      { id:'fr34', num:'FR34', risk:'medium', title:'Maintaining Secure Fencing and Gates to Prevent Animal Escape',
+        who:'The household responsible for property boundaries',
+        what:'Fencing or gates that are damaged, poorly latched, or otherwise allow livestock to escape',
+        where:'Pasture boundaries, pens, and gates throughout the property',
+        why:'An escaped large animal on a road or in an unexpected area creates a serious hazard to the animal, drivers, and anyone nearby who is not expecting to encounter it',
+        how:'Regularly inspect fencing and gates for damage or weak points, repair issues promptly, and ensure every gate latches securely',
+        measurement:'Recognised livestock containment guidance identifies regular fence and gate inspection as essential to preventing escape-related incidents.',
+        example:'A family walks their pasture fence line monthly, repairing a loose wire section before it becomes large enough for livestock to push through.',
+        tip:'Check fencing after any severe weather specifically, since storms and heavy rain are common causes of new fence damage.' },
+
+      { id:'fr35', num:'FR35', risk:'medium', title:'Extra Caution with Bulls, Rams, and Other Goring-Risk Animals',
+        who:'Anyone handling animals with horns or a known temperament risk',
+        what:'Treating a bull, ram, or other horned or historically unpredictable animal the same as calmer livestock',
+        where:'Anywhere bulls, rams, or similar animals are kept',
+        why:'Certain animals, particularly mature bulls, carry a significantly higher risk profile than general livestock and warrant specific extra precautions',
+        how:'Handle bulls, rams, and similarly higher-risk animals with additional caution, ideally with more than one experienced adult present, and never allow children in the same enclosure',
+        measurement:'Recognised livestock handling guidance identifies bulls and similar animals as requiring specific extra caution beyond general livestock handling practices.',
+        example:'A family keeps their bull in a separate, more securely fenced enclosure and only enters with a second adult present, never alone.',
+        tip:'Even a bull that has always seemed calm can become unpredictable — do not let familiarity reduce the caution you use around a higher-risk animal.' },
+
+      { id:'fr36', num:'FR36', risk:'medium', title:'Appropriate Footwear and Clothing When Handling Livestock',
+        who:'Anyone working directly with livestock',
+        what:'Open or unsuitable footwear worn while handling animals that could step on or brush against a foot',
+        where:'Pens, stalls, and any area where livestock are handled',
+        why:'Sturdy, closed footwear reduces the severity of injury from an animal stepping on a foot, which is a common and largely preventable livestock-handling injury',
+        how:'Wear sturdy, closed, ideally reinforced-toe footwear whenever handling livestock, and avoid loose or dangling clothing that could be grabbed or caught',
+        measurement:'Recognised livestock handling guidance recommends sturdy protective footwear as a basic control against common hoof-related injuries.',
+        example:'A farming parent keeps a dedicated pair of sturdy boots by the barn door specifically for livestock handling tasks.',
+        tip:'Keep handling footwear separate and easy to grab, so there is no temptation to handle animals in unsuitable shoes out of convenience.' },
+
+      { id:'fr37', num:'FR37', risk:'medium', title:'Never Turning Your Back on an Unfamiliar or Agitated Animal',
+        who:'Anyone handling livestock, particularly unfamiliar animals',
+        what:'Turning away from an animal that is unfamiliar, agitated, or showing signs of stress',
+        where:'Anywhere livestock are handled',
+        why:'Keeping an unfamiliar or agitated animal in view allows you to notice and respond to early warning signs before a kick, charge, or other defensive reaction occurs',
+        how:'Stay aware of an animal\'s position and body language at all times when nearby, backing away calmly while still facing the animal if it becomes agitated, rather than turning and walking away',
+        measurement:'Recognised livestock handling guidance recommends maintaining visual awareness of an animal, particularly an unfamiliar or stressed one, rather than turning away.',
+        example:'When a new farmhand handles an unfamiliar horse for the first time, they back out of the stall slowly while still facing it, rather than turning to leave directly.',
+        tip:'This habit matters most with animals you do not know well — familiarity with your own regular livestock does not extend automatically to an unfamiliar one.' },
+
+      { id:'fr38', num:'FR38', risk:'medium', title:'Safe Loading and Unloading of Animals into Trailers',
+        who:'Anyone involved in loading or transporting livestock',
+        what:'Rushed or forceful loading of animals into a trailer, or standing in an animal\'s direct path during loading',
+        where:'Loading ramps and trailer entry points',
+        why:'Loading is a high-stress moment for animals and a common point of injury for both animals and handlers if rushed or handled without a clear plan',
+        how:'Allow extra time for loading, use calm, low-pressure handling techniques, and position handlers to guide rather than stand directly in an animal\'s path',
+        measurement:'Recognised livestock transport guidance identifies calm, unhurried loading techniques as significantly safer than rushed handling.',
+        example:'A family allows extra time before a veterinary transport so their cattle can be loaded calmly rather than rushed at the last minute.',
+        tip:'If an animal is resisting loading, pause and reassess rather than forcing the issue — forcing a stressed animal often makes the situation more dangerous, not less.' },
+
+      { id:'fr39', num:'FR39', risk:'low', title:'Basic Animal Body-Language Awareness for the Household',
+        who:'Every household member who may encounter livestock',
+        what:'Household members, including children, unaware of basic warning signs in animal body language',
+        where:'Applies wherever livestock are present on the property',
+        why:'Recognising early warning signs, such as pinned ears, a raised tail, or stomping, gives people time to move to safety before a more serious reaction occurs',
+        how:'Teach every household member, including children old enough to understand, the basic warning signs specific to the animals you keep',
+        measurement:'Recognised livestock safety education identifies basic body-language awareness as a valuable, low-cost addition to physical safety controls.',
+        example:'A family teaches their children to recognise pinned-back ears and a swishing tail as signs to calmly step back and give an animal space.',
+        tip:'Keep the lesson simple and specific to your own animals rather than generic, since warning signs can vary somewhat between species.' },
+
+      { id:'fr40', num:'FR40', risk:'medium', title:'Securing Feed Storage Against Animal Access',
+        who:'Households storing animal feed',
+        what:'Feed stored where livestock could access it directly, leading to overeating or a rush of competing animals',
+        where:'Feed storage areas and barns',
+        why:'Unrestricted access to feed can cause serious digestive illness in livestock and creates a dangerous, crowded rush of competing animals around a handler',
+        how:'Store feed in a secure, animal-proof area, and control feeding so animals cannot access bulk supplies directly',
+        measurement:'Recognised livestock management guidance identifies secure feed storage as important for both animal health and handler safety during feeding.',
+        example:'A family stores their grain feed behind a securely latched door rather than in an open bin accessible from the pasture.',
+        tip:'A crowd of hungry animals around an open feed source is a genuine handler safety risk, not just a management inconvenience — treat it accordingly.' },
+
+      { id:'fr41', num:'FR41', risk:'medium', title:'Hand Hygiene After Animal Contact',
+        who:'Every household member who handles livestock or their environment',
+        what:'Handling animals, feed, or manure without washing hands afterward, particularly before eating',
+        where:'Applies throughout the property after any animal contact',
+        why:'A number of infections can pass between animals and people through direct contact, and thorough hand hygiene after contact is a simple, effective control',
+        how:'Wash hands thoroughly with soap and water after handling animals, feed, or manure, and before eating, drinking, or touching your face',
+        measurement:'Recognised general public-health guidance on zoonotic disease prevention identifies hand hygiene after animal contact as a basic, effective control.',
+        example:'A family keeps a hand-washing station near the barn entrance, making it easy for children to wash up immediately after helping with chores.',
+        tip:'A visible, convenient hand-washing spot near the animal area makes the habit far more likely to stick than relying on remembering to go inside first.' },
+
+      { id:'fr42', num:'FR42', risk:'low', title:'A Designated Safe Observation Area for Children',
+        who:'Households with children interested in watching farm animals',
+        what:'Children watching animals from an unplanned, potentially unsafe spot rather than a designated safe area',
+        where:'Pastures, pens, and animal enclosures',
+        why:'A clearly designated, fenced observation area lets children enjoy watching animals while maintaining a consistent safe distance without needing constant reminders',
+        how:'Set up a specific, fenced spot from which children can safely watch animals, and make this the agreed default location for observation',
+        measurement:'Recognised child-safety guidance around livestock recommends a designated, physically separated observation area as an effective way to combine enjoyment with safety.',
+        example:'A family sets up a small viewing spot along the pasture fence where their children watch the horses, well outside the animals\' reach.',
+        tip:'Involve children in choosing or personalising the spot, such as adding a small bench, so the safe habit feels like a positive routine rather than a restriction.' }
+    ]
+  },
+  {
+    id: 4, name: 'Chemical, Fuel & Pesticide Storage', icon: '🧪',
+    desc: '14 checks: locked and secure storage away from children, correct labeling, PPE for handling, safe fuel storage, keeping chemicals in original containers, and safe disposal.',
+    checks: [
+      { id:'fr43', num:'FR43', risk:'critical', title:'Locked, Secure Storage of Pesticides and Chemicals Away from Children',
+        who:'Every household storing pesticides, herbicides, or other agricultural chemicals',
+        what:'Chemicals stored in an unlocked cupboard, shed, or accessible area where a child could reach them',
+        where:'Any storage location for pesticides, herbicides, or other agricultural chemicals',
+        why:'Accidental chemical ingestion or exposure is a serious poisoning risk, and locked storage is the single most effective control against a curious child accessing hazardous chemicals',
+        how:'Store all pesticides and chemicals in a locked cabinet, shed, or room that is genuinely inaccessible to children, keeping the key or code separate and secure',
+        measurement:'WHO guidance on pesticide safety and storage identifies secure, locked storage away from children as an essential control, not an optional precaution.',
+        example:'A family moves their weed killer and other chemicals from an open shelf to a locked cabinet in the workshop after their toddler begins exploring more independently.',
+        tip:'Treat locked storage as non-negotiable regardless of how "safe" a product seems — many chemicals that appear mild carry real risks if ingested by a small child.' },
+
+      { id:'fr44', num:'FR44', risk:'high', title:'Correct, Legible Labeling of All Chemical Containers',
+        who:'Households storing and using agricultural chemicals',
+        what:'A chemical container with a faded, missing, or incorrect label',
+        where:'All chemical storage areas',
+        why:'Clear labeling ensures anyone handling a chemical, including in an emergency, knows exactly what it is and how to respond if there is accidental exposure',
+        how:'Check that every chemical container has a clear, legible, correct label, and replace or relabel any that have faded or become illegible',
+        measurement:'WHO guidance on pesticide safety and general chemical handling standards identify accurate, legible labeling as a fundamental safety requirement.',
+        example:'A family notices a faded label on an older container and rewrites it clearly before returning it to storage, rather than relying on memory of its contents.',
+        tip:'Check labels periodically, not just when a container is first purchased — sunlight and handling can fade labels significantly over time.' },
+
+      { id:'fr45', num:'FR45', risk:'high', title:'Keeping Chemicals in Their Original Containers',
+        who:'Every household using agricultural chemicals',
+        what:'Chemicals decanted into an unlabeled container, or worse, into a food or drink bottle',
+        where:'Applies to every chemical on the property',
+        why:'A chemical stored in a food or drink container is a serious poisoning risk, since it can be mistaken for something safe to consume, especially by a child',
+        how:'Always keep chemicals in their original, labeled containers, and never transfer them into food, drink, or other unlabeled containers under any circumstances',
+        measurement:'WHO guidance on pesticide safety strongly emphasises keeping chemicals in original containers as a critical poisoning-prevention measure.',
+        example:'A family disposes of an old habit of decanting fuel into a drink bottle for convenience, switching instead to a purpose-made, clearly labeled fuel container.',
+        tip:'If you need a smaller quantity for a task, use a purpose-made, clearly labeled secondary container rather than any container that once held food or drink.' },
+
+      { id:'fr46', num:'FR46', risk:'high', title:'Appropriate PPE When Handling Chemicals or Pesticides',
+        who:'Anyone applying or handling agricultural chemicals',
+        what:'Handling chemicals without the gloves, eye protection, or other PPE specified on the product label',
+        where:'Anywhere chemicals are mixed, applied, or handled',
+        why:'PPE specified on a chemical label is calibrated to the specific risks of that product, and skipping it significantly increases the risk of skin, eye, or respiratory exposure',
+        how:'Read the product label before handling any chemical and wear the specific PPE it recommends, keeping that equipment clean, in good condition, and easily accessible',
+        measurement:'WHO guidance on pesticide safety identifies label-specified PPE as an essential control during mixing and application, not an optional extra.',
+        example:'Before spraying an area with herbicide, a farming parent puts on the gloves and eye protection specified on the label, kept in a dedicated bag near the storage cabinet.',
+        tip:'Store PPE next to the chemicals it is meant to be used with, so there is no gap between reaching for a product and reaching for the right protection.' },
+
+      { id:'fr47', num:'FR47', risk:'high', title:'Safe, Ventilated Fuel Storage Away from Ignition Sources',
+        who:'Households storing fuel for machinery or generators',
+        what:'Fuel stored in a poorly ventilated space or near a potential ignition source, such as an electrical panel or open flame',
+        where:'Fuel storage areas, workshops, and sheds',
+        why:'Fuel vapours can ignite from a source some distance away, and poor ventilation allows dangerous vapour concentrations to build up',
+        how:'Store fuel in approved containers in a well-ventilated area away from ignition sources, electrical equipment, and living spaces',
+        measurement:'Recognised fuel storage safety guidance identifies ventilated storage away from ignition sources as an essential fire and explosion prevention control.',
+        example:'A family relocates their fuel storage from a small enclosed cupboard to a ventilated, purpose-built shed away from the workshop\'s electrical panel.',
+        tip:'If you can smell fuel vapour in a storage area, treat that as a sign ventilation needs improving, not as a normal background smell to get used to.' },
+
+      { id:'fr48', num:'FR48', risk:'medium', title:'Safe Disposal of Empty Containers and Expired Chemicals',
+        who:'Households managing chemical use over time',
+        what:'Empty chemical containers or expired products left in general storage indefinitely, or disposed of incorrectly',
+        where:'Chemical storage areas',
+        why:'Expired or unwanted chemicals accumulating in storage increase clutter and risk, and incorrect disposal can create an environmental or safety hazard',
+        how:'Dispose of empty containers and expired chemicals following the guidance on the product label or through an appropriate local collection service, rather than general household waste',
+        measurement:'WHO and general environmental safety guidance identify following label disposal instructions or specialist collection as the correct approach for chemical waste.',
+        example:'A family sets aside expired chemicals during a periodic storage clear-out and takes them to an appropriate collection point rather than placing them in general rubbish.',
+        tip:'A periodic storage check, perhaps twice a year, is an easy way to catch expired products before they build up.' },
+
+      { id:'fr49', num:'FR49', risk:'medium', title:'Separating Incompatible Chemicals in Storage',
+        who:'Households storing multiple types of agricultural chemicals',
+        what:'Different chemical types stored together without checking whether they are compatible',
+        where:'Chemical storage areas',
+        why:'Some chemicals can react dangerously if they come into contact with each other, particularly if a container leaks, and separated storage prevents this',
+        how:'Check product labels for compatibility guidance and store genuinely incompatible chemical types, such as certain acids and other reactive substances, well apart from each other',
+        measurement:'Recognised chemical storage guidance identifies segregating incompatible substances as a standard safety practice.',
+        example:'A family reorganises their storage shed so that different chemical categories sit on separate shelves, following the general guidance on their product labels.',
+        tip:'When in doubt about compatibility, the product label or manufacturer guidance is the most reliable source — do not guess.' },
+
+      { id:'fr50', num:'FR50', risk:'medium', title:'Following Pesticide Label Instructions and Re-Entry Intervals',
+        who:'Anyone applying pesticides on the property',
+        what:'Entering a treated area, with or without others, before the label-specified re-entry interval has passed',
+        where:'Any area recently treated with pesticide',
+        why:'Re-entry intervals are set to allow chemical residue to settle or break down to a safer level, and entering early increases exposure risk',
+        how:'Read and follow the specific re-entry interval on the pesticide label before allowing anyone, especially children or animals, back into a treated area',
+        measurement:'WHO guidance on pesticide safety identifies following label-specified re-entry intervals as an essential control against unnecessary exposure.',
+        example:'A family marks a treated field boundary with simple flagging tape and keeps children and pets out until the interval specified on the label has passed.',
+        tip:'Write the re-entry date somewhere visible, like a note by the back door, so it is not forgotten in the busy days after application.' },
+
+      { id:'fr51', num:'FR51', risk:'medium', title:'Storing Chemicals Away from Animal Feed',
+        who:'Households storing both feed and chemicals',
+        what:'Chemicals and animal feed stored in the same or an adjacent, easily confused area',
+        where:'Feed and chemical storage areas',
+        why:'Storing chemicals near feed increases the risk of accidental contamination or an animal accessing a hazardous product mistaken for feed',
+        how:'Keep chemical storage in a clearly separate area from animal feed, ideally in a different building or a distinctly separated section',
+        measurement:'Recognised agricultural safety guidance identifies separating chemical and feed storage as a basic control against contamination and accidental animal exposure.',
+        example:'A family relocates their fertiliser storage to the far end of the workshop, well away from the grain bins used for feed.',
+        tip:'If separate buildings are not possible, use a lockable cabinet within the same space rather than open, adjacent shelving.' },
+
+      { id:'fr52', num:'FR52', risk:'medium', title:'Keeping a Spill Response Kit Near Chemical Storage',
+        who:'Households handling agricultural chemicals',
+        what:'No spill response materials readily available near chemical storage or handling areas',
+        where:'Chemical storage and mixing areas',
+        why:'A prompt, correct response to a small spill can prevent it from becoming a larger contamination or exposure issue',
+        how:'Keep basic spill response materials, such as absorbent material and appropriate PPE, near chemical storage and mixing areas, and know the correct response for the specific chemicals you use',
+        measurement:'Recognised chemical handling guidance recommends readily accessible spill response materials as a standard precaution wherever chemicals are stored or mixed.',
+        example:'A family keeps a small spill kit with absorbent granules on a shelf near their chemical storage cabinet, checked periodically to ensure it is stocked.',
+        tip:'Familiarise yourself with the spill response guidance on your specific product labels before an incident happens, not during one.' },
+
+      { id:'fr53', num:'FR53', risk:'medium', title:'Securing Fuel Tanks and Containers Against Tampering',
+        who:'Households with on-site fuel storage',
+        what:'A fuel tank or container without a secure cap or lock, accessible to children or unauthorised access',
+        where:'Fuel storage tanks and containers',
+        why:'An accessible fuel source presents both a poisoning and fire risk, particularly to curious children, and secure caps or locks close this gap',
+        how:'Fit secure, child-resistant caps or locks to fuel tanks and containers, and store portable fuel containers in a locked area when not in active use',
+        measurement:'Recognised fuel storage safety guidance identifies secure caps and restricted access as basic controls against accidental exposure and unauthorised use.',
+        example:'A family fits a locking cap to their generator\'s fuel tank after realising it had been left accessible in an area children sometimes play near.',
+        tip:'Check locks and caps periodically for wear, since a lock that no longer functions properly provides a false sense of security.' },
+
+      { id:'fr54', num:'FR54', risk:'low', title:'Checking Ventilation in Chemical Storage Areas',
+        who:'Households responsible for chemical storage maintenance',
+        what:'A chemical storage area with inadequate ventilation, allowing fumes to build up',
+        where:'Chemical storage sheds, cabinets, and rooms',
+        why:'Good ventilation reduces the concentration of any fumes and lowers the risk of an unpleasant or hazardous atmosphere building up in an enclosed storage space',
+        how:'Check that chemical storage areas have adequate airflow, such as vents or a partially open design, and improve ventilation where it is currently poor',
+        measurement:'Recognised chemical storage guidance identifies adequate ventilation as a standard requirement for any enclosed chemical storage area.',
+        example:'A family adds a simple vent to their previously sealed chemical storage cupboard after noticing a strong smell each time it was opened.',
+        tip:'A noticeable smell on opening a storage area is often the first practical sign that ventilation needs improving.' },
+
+      { id:'fr55', num:'FR55', risk:'medium', title:'Keeping Safety Data Sheets Accessible',
+        who:'Households using multiple agricultural chemicals',
+        what:'No safety data sheet or equivalent product information kept accessible for chemicals in use',
+        where:'Near chemical storage or in an easily accessible household file',
+        why:'In an exposure incident, having the exact product information immediately accessible allows for a faster, more informed response from the household or emergency services',
+        how:'Keep a folder of safety data sheets or equivalent product information for every chemical in use, stored somewhere accessible and known to every adult household member',
+        measurement:'Recognised chemical safety guidance recommends readily accessible product safety information as a standard part of safe chemical management.',
+        example:'A family keeps a labeled folder near their chemical storage with a printed safety sheet for each product currently in use.',
+        tip:'Update the folder whenever a new product is introduced, and remove sheets for products no longer in use to keep it current and easy to search.' },
+
+      { id:'fr56', num:'FR56', risk:'low', title:'Hand-Washing and Clothing Changes After Chemical Handling',
+        who:'Anyone who has handled agricultural chemicals',
+        what:'Continuing daily activities in clothing worn during chemical application, or without washing hands and exposed skin afterward',
+        where:'Applies after any chemical handling activity',
+        why:'Residue on skin or clothing can continue to be a source of low-level exposure if not addressed promptly after handling',
+        how:'Wash hands and any exposed skin thoroughly after handling chemicals, and change out of clothing worn during application before continuing other household activities',
+        measurement:'WHO guidance on pesticide safety recommends washing and a clothing change after handling as a standard post-application hygiene practice.',
+        example:'After spraying the orchard, a farming parent changes out of their work clothes and washes up before returning to the house for lunch.',
+        tip:'Keep a dedicated set of application clothing that stays in the workshop or a designated area, rather than moving between the house and chemical tasks in the same outfit.' }
+    ]
+  },
+  {
+    id: 5, name: 'Structures, Falls & Rural Electrical Hazards', icon: '🏚️',
+    desc: '14 checks: grain bin and silo engulfment awareness, barn loft and hayloft fall risks, ladder safety, overhead power line awareness near tall equipment, and structural fall hazards around the property.',
+    checks: [
+      { id:'fr57', num:'FR57', risk:'critical', title:'Grain Bin and Silo Engulfment Awareness',
+        who:'Anyone working near or considering entering a grain bin or silo',
+        what:'Entering a grain bin or silo alone, or entering flowing or crusted grain without following strict safety procedures',
+        where:'Grain bins, silos, and grain storage structures',
+        why:'Flowing grain can engulf a person in seconds, and this is recognised as one of the most serious and fatal hazards in agricultural work',
+        how:'Treat grain bin and silo entry as a task requiring specialist precautions — never enter alone, always have a trained observer present with a means of rescue and communication, and lock out grain-moving equipment before anyone enters',
+        measurement:'General agricultural safety guidance, comparable to established occupational farm-safety frameworks, identifies grain engulfment as a leading cause of agricultural fatality, with entry requiring strict lock-out and observer procedures.',
+        example:'Before any grain bin task, a family follows a strict rule that no one enters alone, and a second person stays outside with a phone and a plan to get help immediately if needed.',
+        tip:'If you are ever unsure about the safety of entering a grain storage structure, treat that uncertainty as a reason to seek guidance from a qualified agricultural safety professional before proceeding.' },
+
+      { id:'fr58', num:'FR58', risk:'high', title:'Barn Loft and Hayloft Fall Prevention',
+        who:'Anyone accessing a barn loft or hayloft',
+        what:'An open loft edge without a barrier or guard rail, or a weakened floor area not clearly marked',
+        where:'Barn lofts, hay lofts, and elevated storage areas',
+        why:'A fall from a loft height onto a hard barn floor can cause serious injury, and edge protection is a straightforward, effective control',
+        how:'Install a secure guard rail or barrier at open loft edges, mark any known weak floor areas clearly, and restrict loft access for young children entirely',
+        measurement:'Recognised structural safety guidance identifies edge protection at elevated open areas as a standard fall-prevention control.',
+        example:'A family adds a simple rail along the open edge of their hayloft after realising there was previously no barrier between the storage area and the drop below.',
+        tip:'Treat any loft as off-limits to unsupervised children by default, regardless of how sturdy the barrier appears.' },
+
+      { id:'fr59', num:'FR59', risk:'medium', title:'Ladder Safety and Pre-Use Inspection',
+        who:'Anyone using a ladder on the property',
+        what:'A damaged, unstable, or incorrectly positioned ladder used without a pre-use check',
+        where:'Anywhere a ladder is used for access or maintenance',
+        why:'Ladder falls are a common and largely preventable cause of injury, and a brief inspection and correct set-up substantially reduce that risk',
+        how:'Inspect the ladder for damage before each use, set it on firm, level ground at a stable angle, and have someone hold or secure it for any significant height or task',
+        measurement:'Recognised ladder safety guidance recommends a stable set-up angle, generally close to 75 degrees (a 1:4 out-to-up ratio), and a pre-use condition check.',
+        example:'Before climbing to check the barn roof, a family member inspects the ladder\'s rungs and footing and has a second person steady it at the base.',
+        tip:'Never rest a ladder against a surface likely to give way, such as a gutter — check that whatever it leans against can genuinely bear the weight.' },
+
+      { id:'fr60', num:'FR60', risk:'high', title:'Overhead Power Line Awareness Near Tall Equipment',
+        who:'Anyone operating tall machinery, loaders, or irrigation equipment',
+        what:'Operating tall equipment, raised loaders, or irrigation pipe near overhead power lines without checking clearance',
+        where:'Anywhere overhead power lines cross or run near the property',
+        why:'Contact with an overhead power line through tall equipment can be immediately fatal, and awareness of line locations is a critical planning step before operating tall machinery',
+        how:'Identify where overhead power lines run on and near the property, maintain a substantial safe clearance when operating tall equipment nearby, and check with the local utility for guidance on safe clearance distances if uncertain',
+        measurement:'Recognised electrical safety guidance identifies maintaining a substantial, utility-confirmed clearance from overhead power lines as an essential control when operating tall equipment.',
+        example:'Before moving irrigation pipe across a field with an overhead line, a family walks the route first specifically to confirm safe clearance.',
+        tip:'If any part of your equipment is ever in contact with a power line, stay on or in the equipment and call for help rather than stepping down — treat this as a specialist rescue situation.' },
+
+      { id:'fr61', num:'FR61', risk:'medium', title:'Structural Checks of Barns and Outbuildings',
+        who:'The household responsible for property maintenance',
+        what:'A barn or outbuilding floor, roof, or structure with signs of weakness or damage that has not been assessed',
+        where:'Barns, sheds, and outbuildings',
+        why:'A weakened structure can fail without warning, and a periodic check catches deterioration before it becomes a genuine collapse risk',
+        how:'Periodically inspect barns and outbuildings for signs of structural weakness, such as sagging floors, damaged beams, or water damage, and arrange a professional assessment for anything of concern',
+        measurement:'Recognised structural safety guidance recommends periodic inspection of agricultural outbuildings, with professional assessment for any identified concern.',
+        example:'A family notices a sagging section of their hay barn floor and restricts access to that area until it has been properly assessed and repaired.',
+        tip:'Pay particular attention after severe weather, since storm damage to outbuildings is not always immediately obvious from the outside.' },
+
+      { id:'fr62', num:'FR62', risk:'medium', title:'Safe Stacking and Storage in Lofts to Prevent Collapse',
+        who:'Households storing hay, straw, or equipment in elevated storage',
+        what:'Stacked storage in a loft that is unstable, overloaded, or poorly arranged',
+        where:'Barn lofts and elevated storage areas',
+        why:'An unstable stack can collapse or shift suddenly, creating a fall or crush hazard for anyone nearby or working below',
+        how:'Stack stored materials securely and within the loft\'s rated capacity, keep stacks stable and appropriately tied where needed, and avoid working directly beneath an unstable stack',
+        measurement:'Recognised agricultural storage guidance identifies stable, weight-appropriate stacking as a basic control against storage collapse.',
+        example:'A family restacks a leaning section of baled hay in their loft, spreading the load more evenly before it becomes unstable.',
+        tip:'If a stack looks even slightly unstable, address it before working nearby rather than assuming it will hold.' },
+
+      { id:'fr63', num:'FR63', risk:'medium', title:'Checking Roof and Structure Condition After Storms',
+        who:'The household responsible for property maintenance',
+        what:'A roof or structure not checked for damage after a significant storm or severe weather event',
+        where:'All structures on the property',
+        why:'Storm damage can weaken a roof or structure in ways that are not immediately obvious, creating a delayed collapse or fall risk if left unaddressed',
+        how:'Walk the property after any significant storm specifically checking roofs and structures for visible damage, and arrange repair or professional assessment promptly for anything found',
+        measurement:'Recognised structural maintenance guidance recommends a post-storm inspection as standard practice for agricultural buildings.',
+        example:'After a period of strong winds, a family checks their barn roof from the ground with binoculars and notices several displaced panels needing repair.',
+        tip:'A ground-level visual check with binoculars is often enough to spot obvious storm damage without needing to climb up immediately.' },
+
+      { id:'fr64', num:'FR64', risk:'medium', title:'Care and Fall-Restraint Awareness When Working at Height',
+        who:'Anyone working on a roof or elevated structure',
+        what:'Working at height on a roof or structure without appropriate fall-restraint precautions',
+        where:'Roofs and elevated structures on the property',
+        why:'A fall from height is a leading cause of serious injury, and basic fall-restraint precautions significantly reduce that risk during any elevated work',
+        how:'Use appropriate fall-restraint equipment or a securely anchored line for any significant height work, and avoid working at height alone or in poor weather conditions',
+        measurement:'Recognised working-at-height guidance identifies fall-restraint equipment and avoiding solo work at height as standard precautions.',
+        example:'Before repairing a section of barn roof, a family member sets up a secured anchor line rather than working freely near the edge.',
+        tip:'If a task at height feels beyond your confidence or equipment, treat that as a clear signal to bring in a qualified contractor rather than proceeding.' },
+
+      { id:'fr65', num:'FR65', risk:'medium', title:'Keeping Ladders and Height-Access Points Secured from Children',
+        who:'Households with children and ladder or loft access on the property',
+        what:'A ladder left accessible, allowing a child to climb to a loft or roof unsupervised',
+        where:'Barns, sheds, and any elevated access point',
+        why:'An accessible ladder can turn a curious child\'s exploration into a serious fall risk, and simply storing ladders securely closes this gap',
+        how:'Store ladders lying flat, locked away, or otherwise inaccessible to children when not in active use, rather than leaving them propped against a structure',
+        measurement:'Recognised child-safety guidance identifies restricting ladder access as an effective control against unsupervised height exploration by children.',
+        example:'A family adopts a rule that ladders are always laid flat or locked in the workshop when not actively in use, rather than left leaning against the barn.',
+        tip:'Treat any ladder left in place overnight as a genuine access point a child could use, not just a convenience for the next day\'s task.' },
+
+      { id:'fr66', num:'FR66', risk:'medium', title:'Keeping Yard Pathways Clear of Trip Hazards',
+        who:'Everyone using yard and outbuilding pathways',
+        what:'Tools, cables, hoses, or debris left across regularly used pathways',
+        where:'Yards and pathways between buildings',
+        why:'Cluttered pathways are a common and easily preventable source of trips and falls, particularly in low light or when carrying items',
+        how:'Keep regularly used pathways clear of tools, cables, and debris, and coil or store hoses and cords immediately after use',
+        measurement:'Recognised general safety guidance identifies clear, well-maintained pathways as a basic fall-prevention control in any working environment.',
+        example:'A family makes coiling the yard hose immediately after use a standard end-of-task habit, rather than leaving it stretched across the path.',
+        tip:'Walk your main pathways at dusk occasionally, when trip hazards are genuinely harder to see, to check they are as clear as they seem in daylight.' },
+
+      { id:'fr67', num:'FR67', risk:'low', title:'Adequate Lighting in Barns and Outbuildings',
+        who:'Households working in barns and outbuildings, particularly during darker months or early mornings',
+        what:'Poor or non-functioning lighting in barns, sheds, or other outbuildings used regularly',
+        where:'Barns, sheds, and outbuildings',
+        why:'Good lighting reduces the risk of trips, falls, and mishandling equipment or animals in dim conditions',
+        how:'Check and maintain functional lighting in every regularly used outbuilding, adding additional fixtures where dark areas make tasks harder to do safely',
+        measurement:'Recognised workplace safety guidance identifies adequate lighting in work areas as a basic control against trip, fall, and handling errors.',
+        example:'A family adds a second light fixture to a dim corner of their barn used for evening chores during shorter winter days.',
+        tip:'Check lighting specifically at the times of day tasks are actually done, since morning or evening light levels can be very different from midday.' },
+
+      { id:'fr68', num:'FR68', risk:'medium', title:'Fencing Off Unstable or Derelict Structures',
+        who:'Households with an older or disused structure on the property',
+        what:'A derelict or structurally unsound building left accessible rather than fenced off',
+        where:'Any unstable or disused structure on the property',
+        why:'A derelict structure can pose a genuine collapse or fall risk, and restricting access is the most reliable control until the structure is repaired or removed',
+        how:'Fence off or clearly restrict access to any structure known to be unstable or derelict, and treat it as off-limits until a professional assessment or repair has taken place',
+        measurement:'Recognised structural safety guidance identifies restricting access to unstable structures as a necessary interim control before repair or demolition.',
+        example:'A family fences off an old, partially collapsed outbuilding on their property boundary, keeping children and visitors well away until it can be properly addressed.',
+        tip:'An old structure that has "always been like that" is worth a fresh, honest safety assessment rather than being assumed safe out of familiarity.' },
+
+      { id:'fr69', num:'FR69', risk:'low', title:'A Periodic Structural Inspection Schedule',
+        who:'The household responsible for property maintenance',
+        what:'Structural checks done irregularly or only after a problem becomes obvious',
+        where:'All buildings and structures on the property',
+        why:'A regular, planned inspection schedule catches gradual deterioration earlier than an ad hoc approach that only responds after damage is already visible',
+        how:'Set a periodic schedule, such as each change of season, for walking the property and checking the condition of all major structures',
+        measurement:'Recognised property maintenance guidance recommends a scheduled, recurring structural inspection rather than relying on incidental observation alone.',
+        example:'A family adds a seasonal "structure walk" to their household calendar, checking barns, sheds, and fencing systematically each time.',
+        tip:'Keep brief notes or photos from each inspection, so changes over time are easier to notice and track.' },
+
+      { id:'fr70', num:'FR70', risk:'medium', title:'Securely Covering or Fencing Ground Openings and Pits',
+        who:'Households with grain bins, cisterns, or other ground-level openings',
+        what:'An uncovered or poorly secured ground-level opening, such as a cistern, pit, or bin access hatch, presenting a fall hazard',
+        where:'Grain bins, cisterns, and other ground-level structural openings',
+        why:'Beyond the drowning and engulfment risks covered elsewhere, an open ground-level structure is also a straightforward fall hazard, particularly in low light or unfamiliar footing',
+        how:'Keep ground-level openings securely covered or fenced at all times, and mark them clearly if a cover cannot be permanent',
+        measurement:'Recognised structural safety guidance identifies secure covers or barriers at ground-level openings as a standard fall-prevention control.',
+        example:'A family fits a secure, load-rated cover to an old cistern access point after noticing it had been left loosely covered with boards.',
+        tip:'Treat any ground-level opening as a hazard by default until it has a genuinely secure cover, rather than assuming an old cover is still adequate.' }
+    ]
+  },
+  {
+    id: 6, name: 'Emergency Preparedness for Remote & Rural Properties', icon: '🚑',
+    desc: '14 checks: awareness that emergency response times may be longer in rural areas, a well-stocked first aid kit suited to rural risks, fire risk awareness, clear emergency vehicle access, communication planning for signal gaps, and a written emergency plan shared with the household.',
+    checks: [
+      { id:'fr71', num:'FR71', risk:'high', title:'Understanding That Emergency Response Times May Be Longer in Rural Areas',
+        who:'Every household member on a rural or remote property',
+        what:'Assuming emergency response will arrive as quickly as it might in a more populated area',
+        where:'Applies to the whole property',
+        why:'Rural and remote properties often have genuinely longer emergency response times, and understanding this shapes how prepared a household needs to be to manage the first critical minutes of an emergency',
+        how:'Understand your property\'s realistic distance from emergency services, and factor this into first aid readiness, fire response planning, and general emergency preparedness',
+        measurement:'Recognised rural safety guidance identifies realistic awareness of response times as a foundational part of rural emergency planning, distinct from urban assumptions.',
+        example:'A family researches the realistic response time to their property and uses it to decide how much first aid training and equipment feels appropriate for their household.',
+        tip:'This awareness is not meant to be worrying — it is simply a practical planning input, the same way you would plan around weather or seasonal access.' },
+
+      { id:'fr72', num:'FR72', risk:'high', title:'A Well-Stocked First Aid Kit Suited to Rural Risks',
+        who:'Every household on a farm or rural property',
+        what:'A first aid kit that is minimal, outdated, or not suited to the specific hazards common on a farm, such as machinery injuries or animal bites',
+        where:'A central, known location in the home, plus a secondary kit near high-risk work areas',
+        why:'Given potentially longer emergency response times, a well-stocked first aid kit suited to rural risks can make a meaningful difference in the time before professional help arrives',
+        how:'Stock a first aid kit that includes supplies appropriate for bleeding control and common farm injury types, check and restock it periodically, and keep a second kit near machinery or animal-handling areas',
+        measurement:'Recognised rural first aid guidance recommends kits stocked for bleeding control and common agricultural injury types, checked and restocked on a regular schedule.',
+        example:'A family upgrades their basic household first aid kit with additional bleeding-control supplies and keeps a second, smaller kit in the machinery shed.',
+        tip:'Check expiry dates and restock supplies at the same time each year, such as alongside another regular household task, so it becomes a reliable habit.' },
+
+      { id:'fr73', num:'FR73', risk:'high', title:'Fire Risk Awareness Around Hay, Fuel, and Machinery',
+        who:'The household managing farm buildings and equipment',
+        what:'Hay, fuel, and machinery stored or maintained without specific attention to fire risk',
+        where:'Hay storage, fuel storage, and machinery sheds',
+        why:'Hay can generate heat and combust under certain storage conditions, and fuel and machinery both carry recognised fire risks that warrant specific attention beyond general household fire safety',
+        how:'Store hay properly to reduce heat build-up risk, keep fuel storage away from ignition sources, maintain machinery to reduce fire risk from faults, and keep working fire extinguishers near each of these areas',
+        measurement:'Recognised agricultural fire safety guidance identifies hay, fuel, and machinery as specific fire risk categories requiring dedicated attention beyond general household fire precautions.',
+        example:'A family checks their stored hay periodically for unusual heat or smell, a known early warning sign of a developing fire risk, particularly with newer bales.',
+        tip:'If stored hay ever feels noticeably warm or has an unusual smell, treat that as worth investigating immediately rather than waiting to see if it changes.' },
+
+      { id:'fr74', num:'FR74', risk:'medium', title:'Keeping Emergency Vehicle Access Points Clear and Accessible',
+        who:'The household responsible for property access',
+        what:'Gates, lanes, or access points that would be locked, blocked, or unclear to an emergency vehicle arriving at the property',
+        where:'Property entrances, access lanes, and internal gates',
+        why:'A delay finding or opening access at the property boundary adds to an already potentially longer rural response time, at exactly the moment speed matters most',
+        how:'Keep at least one clear, known access route to the home unlocked or with an accessible means of entry, and ensure the route is clearly marked and free of obstruction',
+        measurement:'Recognised rural emergency planning guidance identifies clear, accessible emergency vehicle routes as a specific rural preparedness consideration.',
+        example:'A family identifies their main gate as the emergency access point and keeps it clear of parked equipment, sharing this information on their emergency information sheet.',
+        tip:'If your main entrance is often locked, consider a lockbox or an agreed method emergency services can use to gain access quickly.' },
+
+      { id:'fr75', num:'FR75', risk:'medium', title:'Communication Planning for Areas with Mobile Signal Gaps',
+        who:'Every household member on a property with known signal limitations',
+        what:'No backup communication plan for areas of the property or times when mobile signal is unreliable',
+        where:'Applies to the whole property, particularly any known low-signal areas',
+        why:'A rural property may have areas with poor or no mobile signal, and knowing this in advance allows the household to plan an alternative way to call for help if needed',
+        how:'Identify any known signal gaps on the property, and establish a backup communication method or plan, such as a landline, a two-way radio, or a known nearby location with reliable signal',
+        measurement:'Recognised rural emergency planning guidance identifies communication contingency planning as a specific and important part of remote property preparedness.',
+        example:'A family keeps a basic two-way radio as a backup after noticing their phone signal drops out in the lower field where machinery work often happens.',
+        tip:'Test your backup communication method periodically, not just when it is first set up, to confirm it still works when actually needed.' },
+
+      { id:'fr76', num:'FR76', risk:'high', title:'A Written Emergency Plan Shared with the Whole Household',
+        who:'Every member of the household',
+        what:'No written emergency plan, or a plan that exists only in one person\'s memory',
+        where:'Applies to the whole property',
+        why:'A written plan that every household member has seen and understands removes reliance on a single person being present and able to direct the response during an emergency',
+        how:'Write a simple emergency plan covering key contacts, shutoff and access locations, and basic response steps for the most likely emergencies on your property, and review it with every household member, including capable children',
+        measurement:'Recognised emergency preparedness guidance recommends a written, shared household plan as a foundational element of readiness, rather than relying on informal knowledge.',
+        example:'A family creates a single-page emergency plan and reviews it together once a year, making sure even their older children know where to find it and what it covers.',
+        tip:'Keep the written plan somewhere accessible to everyone, such as alongside your cheat sheet, rather than filed away where it would be hard to find quickly.' },
+
+      { id:'fr77', num:'FR77', risk:'medium', title:'Clearly Marking the Property Address and Access for Responders',
+        who:'The household responsible for property signage',
+        what:'A property address that is not clearly visible from the road or main access point',
+        where:'The property entrance and main access route',
+        why:'A clearly visible address helps emergency responders find the property quickly, which matters even more given potentially longer rural response distances',
+        how:'Ensure the property address is clearly and visibly marked at the main entrance, ideally reflective and legible at night, and confirm it matches what is on file with emergency services',
+        measurement:'Recognised rural emergency planning guidance identifies clear, visible property address marking as a simple, effective way to reduce response delays.',
+        example:'A family adds a reflective address sign at their main gate after realising it was previously identifiable only by an unmarked mailbox.',
+        tip:'Check that your address sign is visible from both directions of the road and clear of overgrown vegetation that can obscure it over time.' },
+
+      { id:'fr78', num:'FR78', risk:'medium', title:'Fire Extinguishers Near High-Risk Areas',
+        who:'The household managing barns, workshops, and machinery areas',
+        what:'No fire extinguisher present near barns, workshops, or fuel storage, or one that is expired',
+        where:'Barns, workshops, machinery sheds, and fuel storage areas',
+        why:'A fire in a machinery or fuel area can develop quickly, and a nearby, working extinguisher gives the best chance of controlling it early',
+        how:'Place a working, in-date fire extinguisher near each high-risk area — barns, workshops, and fuel storage — and check them on a regular schedule',
+        measurement:'Recognised agricultural fire safety guidance identifies extinguishers near high-risk work and storage areas as a standard control, in addition to household fire extinguishers.',
+        example:'A family mounts a fire extinguisher just inside the workshop door and checks its gauge every few months as part of a general property walk-around.',
+        tip:'Make sure everyone in the household knows the extinguisher\'s exact location and basic use, not just the person who installed it.' },
+
+      { id:'fr79', num:'FR79', risk:'medium', title:'Firebreak and Vegetation Management Around Structures',
+        who:'Households in areas where vegetation fire risk is a relevant consideration',
+        what:'Dense, dry vegetation growing close to buildings without any managed clearance',
+        where:'The area immediately surrounding buildings and structures',
+        why:'Managed vegetation clearance around structures can slow the spread of a vegetation fire and give more time and options for response',
+        how:'Where vegetation fire risk is relevant to your area, maintain a cleared or managed zone of reduced vegetation immediately around key structures, particularly during drier seasons',
+        measurement:'Recognised rural fire safety guidance identifies managed vegetation clearance around structures as an effective control in areas where this risk is relevant.',
+        example:'A family clears dry brush from directly around their barn each year before the driest part of the season, following general regional guidance for their area.',
+        tip:'This is most relevant in genuinely fire-prone regions and seasons — check what applies to your specific location and climate rather than assuming a fixed approach everywhere.' },
+
+      { id:'fr80', num:'FR80', risk:'medium', title:'Backup Power and Communication Planning for Outages',
+        who:'The household managing critical systems during power or communication outages',
+        what:'No plan for how critical systems, such as water pumps or refrigeration, will be managed during a power outage',
+        where:'Applies to the whole property during an outage',
+        why:'Rural properties can experience longer power restoration times than urban areas, and a plan reduces the impact of an outage on critical systems like water supply and refrigeration',
+        how:'Identify which systems are critical during an outage, such as a well pump or medical refrigeration, and establish a backup plan, such as a generator or an alternative arrangement, for the most critical needs',
+        measurement:'Recognised rural preparedness guidance identifies backup planning for critical systems as an important consideration given potentially longer rural outage durations.',
+        example:'A family with a well-dependent water supply keeps a small generator specifically sized to run their water pump during an extended outage.',
+        tip:'Test any backup generator periodically under an actual load, not just by starting it briefly, to confirm it will genuinely handle what you need during an outage.' },
+
+      { id:'fr81', num:'FR81', risk:'low', title:'At Least One Household Member Trained in Basic First Aid',
+        who:'Every household on a rural or remote property',
+        what:'No household member with up-to-date basic first aid training',
+        where:'Applies to the whole household',
+        why:'Given potentially longer response times, having at least one trained household member significantly improves the household\'s ability to respond effectively in the first critical minutes',
+        how:'Arrange for at least one, ideally more than one, household member to complete a basic first aid course, and keep the training current with periodic refreshers',
+        measurement:'Recognised emergency preparedness guidance recommends current first aid training as a valuable, practical addition to rural household readiness.',
+        example:'A family arranges for both parents to complete a basic first aid refresher course, timed to coincide with renewing their kit\'s supplies.',
+        tip:'Involve older children or teenagers in age-appropriate first aid training as well — an extra trained person in the household is always valuable.' },
+
+      { id:'fr82', num:'FR82', risk:'medium', title:'Keeping Emergency Contacts and Property Information Accessible',
+        who:'Every household member',
+        what:'Emergency contacts and key property information, such as shutoff locations, not written down or easily found',
+        where:'Applies throughout the home',
+        why:'In a stressful emergency, having contacts and key information already written down and accessible saves valuable time compared to trying to recall or locate them under pressure',
+        how:'Keep a written, accessible list of emergency contacts and key property information, such as the address, access instructions, and shutoff locations, and personalise it on your cheat sheet',
+        measurement:'Recognised emergency preparedness guidance recommends a written, accessible emergency information record as standard household practice.',
+        example:'A family fills in their personalised cheat sheet with contacts for the nearest veterinarian, utility providers, and a neighbour who can assist in an emergency.',
+        tip:'Update the list whenever a contact changes, and do a quick annual check to confirm everything on it is still current.' },
+
+      { id:'fr83', num:'FR83', risk:'low', title:'Checking Weather Warnings Relevant to the Property',
+        who:'The household managing outdoor and animal safety',
+        what:'Severe weather warnings not checked regularly, particularly relevant to livestock, water levels, or fire risk',
+        where:'Applies to the whole property',
+        why:'Advance warning of severe weather allows time to move animals, secure equipment, or adjust water and fire risk precautions before conditions become hazardous',
+        how:'Check weather warnings relevant to your property regularly, particularly during seasons associated with storms, flooding, or heightened fire risk, and act on advance warnings promptly',
+        measurement:'Recognised rural safety guidance identifies proactive weather monitoring as a practical, low-cost part of seasonal hazard management.',
+        example:'A family moves livestock to higher, more sheltered pasture ahead of a forecast storm after checking a routine weather warning.',
+        tip:'Build weather checking into an existing daily habit, such as a morning routine, so it happens consistently rather than only when a storm already feels imminent.' },
+
+      { id:'fr84', num:'FR84', risk:'medium', title:'Regular Review and Practice of the Household Emergency Plan',
+        who:'Every household member',
+        what:'An emergency plan created once and never revisited or practised',
+        where:'Applies to the whole household',
+        why:'A plan that is reviewed and occasionally practised is far more likely to be remembered and followed effectively than one that is filed away and forgotten',
+        how:'Review the household emergency plan at least once a year, updating contacts and details as needed, and walk through key elements, such as shutoff locations, with the whole household',
+        measurement:'Recognised emergency preparedness guidance recommends at least an annual review and practice of a household emergency plan to keep it current and familiar.',
+        example:'A family sets a yearly reminder to review their emergency plan together, updating contact numbers and confirming everyone still remembers where key equipment is kept.',
+        tip:'Pair the review with another regular household event, such as a seasonal structure walk, so it becomes a natural part of an existing routine rather than an extra task.' }
+    ]
+  }
+];
+
+const STORE_KEY = 'safelife-farmrural-pro';
+const completed = new Set();
+let lang = 'en', theme = 'barnred', mode = 'light', riskFilter = null, activeZone = 1;
+const TOTAL = 84;
+
+function t(key){ return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key; }
+function persist(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify({completed:[...completed], lang, theme, mode})); }catch(e){}
+}
+function restore(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    (d.completed||[]).forEach(id=>completed.add(id));
+    if(false && d.lang && I18N[d.lang]) lang = d.lang; /* language switching disabled for English-only release — remove "false &&" to re-enable */
+    if(d.theme) theme = d.theme;
+    if(d.mode) mode = d.mode;
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════
+// PROGRESS & STATS
+// ═══════════════════════════════════════════
+function updateProgress(){
+  const done = completed.size;
+  document.getElementById('topbar-done').textContent = done;
+  document.getElementById('progress-count').textContent = done + ' ' + t('ofWord') + ' ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (done/TOTAL*100) + '%';
+  ZONES.forEach(z=>{
+    const zDone = z.checks.filter(c=>completed.has(c.id)).length;
+    document.getElementById('ztc-'+z.id).textContent = zDone + '/14';
+  });
+  document.getElementById('celebrate').classList.toggle('show', done === TOTAL);
+  persist();
+}
+function fillStats(){
+  const counts = {critical:0,high:0,medium:0,low:0};
+  ZONES.forEach(z=>z.checks.forEach(c=>counts[c.risk]++));
+  ['critical','high','medium','low'].forEach(r=>{ document.getElementById('s-'+r).textContent = counts[r]; });
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function buildCard(check){
+  const card = document.createElement('div');
+  card.className = 'check-card' + (completed.has(check.id) ? ' completed' : '');
+  card.dataset.id = check.id;
+  card.dataset.risk = check.risk;
+  card.innerHTML =
+    '<div class="check-header">' +
+      '<div class="check-checkbox">' + (completed.has(check.id) ? '✓' : '') + '</div>' +
+      '<div class="check-num">' + check.num + '</div>' +
+      '<div class="check-risk risk-' + check.risk + '">' + t(check.risk) + '</div>' +
+      '<div class="check-title">' + check.title + '</div>' +
+      '<div class="check-chevron">▼</div>' +
+    '</div>' +
+    '<div class="check-detail">' +
+      '<div class="detail-grid">' +
+        '<div class="detail-item"><div class="detail-label"><span>👤</span>' + t('who') + '</div><div class="detail-value">' + check.who + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>⚠️</span>' + t('what') + '</div><div class="detail-value">' + check.what + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>📍</span>' + t('where') + '</div><div class="detail-value">' + check.where + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>❓</span>' + t('why') + '</div><div class="detail-value">' + check.why + '</div></div>' +
+        '<div class="detail-item full"><div class="detail-label"><span>🔧</span>' + t('how') + '</div><div class="detail-value">' + check.how + '</div></div>' +
+      '</div>' +
+      '<div class="measurement-box"><strong>📏 ' + t('standards') + '</strong>' + check.measurement + '</div>' +
+      '<div class="detail-item full" style="margin-top:10px;"><div class="detail-label"><span>💬</span>' + t('example') + '</div><div class="detail-value">' + check.example + '</div></div>' +
+      '<div class="tip-box"><span class="tip-icon">💡</span><span class="tip-text"><strong>' + t('quickTip') + ':</strong> ' + check.tip + '</span></div>' +
+    '</div>';
+  card.querySelector('.check-header').addEventListener('click', function(){ card.classList.toggle('open'); });
+  card.querySelector('.check-checkbox').addEventListener('click', function(e){
+    e.stopPropagation();
+    if(completed.has(check.id)){ completed.delete(check.id); card.classList.remove('completed'); this.textContent=''; }
+    else { completed.add(check.id); card.classList.add('completed'); this.textContent='✓'; }
+    updateProgress();
+  });
+  return card;
+}
+
+function renderAll(){
+  document.querySelectorAll('.zone-panel').forEach(p=>p.remove());
+  const main = document.getElementById('main-content');
+  ZONES.forEach(z=>{
+    const panel = document.createElement('div');
+    panel.className = 'zone-panel' + (z.id === activeZone ? ' active' : '');
+    panel.id = 'zone-panel-' + z.id;
+    const header = document.createElement('div');
+    header.className = 'zone-header';
+    header.innerHTML = '<div class="zone-icon">' + (ICONS['z'+z.id] || z.icon) + '</div><div class="zone-header-text"><h2>' + t('z'+z.id) + '</h2><p>' + t('zd'+z.id) + '</p></div>';
+    panel.appendChild(header);
+    const actions = document.createElement('div');
+    actions.className = 'zone-actions';
+    const bExpand = document.createElement('button'); bExpand.className='btn btn-outline'; bExpand.textContent=t('expandAll');
+    const bCollapse = document.createElement('button'); bCollapse.className='btn btn-outline'; bCollapse.textContent=t('collapseAll');
+    const bUnmark = document.createElement('button'); bUnmark.className='btn btn-outline'; bUnmark.textContent=t('unmarkAll');
+    const bMark = document.createElement('button'); bMark.className='btn btn-primary'; bMark.textContent=t('markAll');
+    actions.append(bExpand,bCollapse,bUnmark,bMark);
+    panel.appendChild(actions);
+    const list = document.createElement('div');
+    list.className = 'checks-list';
+    z.checks.forEach(c=>list.appendChild(buildCard(c)));
+    panel.appendChild(list);
+    const disc = document.createElement('div');
+    disc.className = 'zone-disclaimer';
+    disc.textContent = '⚕ ' + t('disclaimer');
+    panel.appendChild(disc);
+    bExpand.addEventListener('click', ()=>list.querySelectorAll('.check-card').forEach(c=>c.classList.add('open')));
+    bCollapse.addEventListener('click', ()=>list.querySelectorAll('.check-card').forEach(c=>c.classList.remove('open')));
+    bMark.addEventListener('click', ()=>{ z.checks.forEach(c=>completed.add(c.id)); refreshCards(list); });
+    bUnmark.addEventListener('click', ()=>{ z.checks.forEach(c=>completed.delete(c.id)); refreshCards(list); });
+    main.appendChild(panel);
+  });
+  applyFilters();
+  updateProgress();
+}
+function refreshCards(list){
+  list.querySelectorAll('.check-card').forEach(card=>{
+    const done = completed.has(card.dataset.id);
+    card.classList.toggle('completed', done);
+    card.querySelector('.check-checkbox').textContent = done ? '✓' : '';
+  });
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════
+// ZONES / SEARCH / FILTERS
+// ═══════════════════════════════════════════
+function switchZone(id){
+  activeZone = id;
+  document.querySelectorAll('.zone-tab').forEach(tab=>tab.classList.toggle('active', +tab.dataset.zone === id));
+  document.querySelectorAll('.zone-panel').forEach(p=>p.classList.toggle('active', p.id === 'zone-panel-' + id));
+}
+document.querySelectorAll('.zone-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{ document.getElementById('search-input').value=''; applyFilters(); switchZone(+tab.dataset.zone); });
+});
+document.querySelectorAll('.hero-badge[data-zone]').forEach(badge=>{
+  badge.addEventListener('click', ()=>{
+    switchZone(+badge.dataset.zone);
+    document.getElementById('zone-tabs').scrollIntoView({behavior:'smooth'});
+  });
+});
+document.querySelectorAll('.stat-pill[data-risk]').forEach(pill=>{
+  pill.addEventListener('click', ()=>{
+    riskFilter = (riskFilter === pill.dataset.risk) ? null : pill.dataset.risk;
+    document.querySelectorAll('.stat-pill[data-risk]').forEach(p=>p.classList.toggle('filter-on', p.dataset.risk === riskFilter));
+    applyFilters();
+  });
+});
+document.getElementById('search-input').addEventListener('input', applyFilters);
+
+function applyFilters(){
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const searching = q.length > 0;
+  let anyVisible = false;
+  ZONES.forEach(z=>{
+    const panel = document.getElementById('zone-panel-' + z.id);
+    if(!panel) return;
+    let zoneVisible = 0;
+    panel.querySelectorAll('.check-card').forEach(card=>{
+      const check = z.checks.find(c=>c.id === card.dataset.id);
+      const text = (check.title+' '+check.who+' '+check.what+' '+check.where+' '+check.why+' '+check.how+' '+check.measurement+' '+check.example+' '+check.tip).toLowerCase();
+      const matchQ = !searching || text.includes(q);
+      const matchR = !riskFilter || check.risk === riskFilter;
+      const show = matchQ && matchR;
+      card.style.display = show ? '' : 'none';
+      if(show) zoneVisible++;
+    });
+    if(searching || riskFilter){
+      panel.classList.toggle('active', zoneVisible > 0);
+      panel.querySelector('.zone-actions').style.display = 'none';
+    } else {
+      panel.classList.toggle('active', z.id === activeZone);
+      panel.querySelector('.zone-actions').style.display = '';
+    }
+    if(zoneVisible > 0) anyVisible = true;
+  });
+  document.getElementById('search-no-results').style.display = (searching || riskFilter) && !anyVisible ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════
+// THEMES / MODE / LANGUAGE
+// ═══════════════════════════════════════════
+const THEMES = [
+  {id:'barnred', name:'Barn Red',       c:'#8C3B2B'},
+  {id:'eucalyptus', name:'Eucalyptus Fresh', c:'#5E9C82'},
+  {id:'periwinkle', name:'Periwinkle Calm', c:'#7680B5'},
+  {id:'teal',   name:'Teal Calm',     c:'#14B8A6'},
+  {id:'amber',  name:'Warm Amber',    c:'#F59E0B'},
+  {id:'rose',   name:'Rose Care',     c:'#E11D48'},
+  {id:'violet', name:'Gentle Violet', c:'#7C3AED'},
+  {id:'ocean',  name:'Ocean Blue',    c:'#2563EB'},
+  {id:'forest', name:'Forest Green',  c:'#16A34A'}
+];
+function buildThemeMenu(){
+  const dd = document.getElementById('dd-theme');
+  dd.innerHTML = '<div class="dropdown-title">' + t('theme') + '</div>';
+  THEMES.forEach(th=>{
+    const row = document.createElement('button');
+    row.className = 'theme-row' + (th.id === theme ? ' selected' : '');
+    row.innerHTML = '<span class="theme-swatch" style="background:' + th.c + '"></span>' + th.name + (th.id === theme ? '<span class="check-mark">✓</span>' : '');
+    row.addEventListener('click', e=>{
+      e.stopPropagation();
+      theme = th.id;
+      document.body.dataset.theme = theme;
+      buildThemeMenu(); persist();
+    });
+    dd.appendChild(row);
+  });
+}
+function buildLangMenu(){
+  const dd = document.getElementById('dd-lang');
+  dd.innerHTML = '<div class="dropdown-title">🌐 Language</div>';
+  Object.keys(I18N).forEach(code=>{
+    const row = document.createElement('button');
+    row.className = 'theme-row' + (code === lang ? ' selected' : '');
+    row.innerHTML = '<span style="font-weight:800;font-size:11px;color:var(--accent);min-width:22px;">' + code.toUpperCase() + '</span>' + I18N[code].name + (code === lang ? '<span class="check-mark">✓</span>' : '');
+    row.addEventListener('click', e=>{
+      e.stopPropagation();
+      lang = code;
+      applyLang(); renderAll(); buildLangMenu(); buildManual(); buildCheat(); buildCollection(); persist();
+    });
+    dd.appendChild(row);
+  });
+  const note = document.createElement('div');
+  note.style.cssText = 'font-size:10.5px;color:var(--ink-soft);padding:8px;max-width:230px;line-height:1.4;';
+  note.textContent = t('langNote');
+  dd.appendChild(note);
+}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.innerHTML = t(el.dataset.i18n); });
+  document.getElementById('search-input').placeholder = t('searchPh');
+  document.getElementById('lang-label').textContent = lang.toUpperCase();
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+}
+function toggleDropdown(id, e){
+  e.stopPropagation();
+  const dd = document.getElementById(id);
+  const wasOpen = dd.classList.contains('open');
+  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('open'));
+  if(!wasOpen) dd.classList.add('open');
+}
+document.getElementById('btn-theme').addEventListener('click', e=>toggleDropdown('dd-theme', e));
+document.getElementById('btn-lang').addEventListener('click', e=>toggleDropdown('dd-lang', e));
+document.addEventListener('click', ()=>document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('open')));
+document.getElementById('btn-mode').addEventListener('click', function(){
+  mode = mode === 'light' ? 'dark' : 'light';
+  document.body.dataset.mode = mode;
+  this.textContent = mode === 'light' ? '🌙' : '☀️';
+  persist();
+});
+
+// ═══════════════════════════════════════════
+// SAVE / LOAD PROGRESS
+// ═══════════════════════════════════════════
+document.getElementById('btn-save').addEventListener('click', ()=>{
+  const data = { product:'SafeLife', module:'farmrural', version:1, savedAt:new Date().toISOString(), completed:[...completed], lang, theme, mode };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'SafeLife_FarmRural_Progress_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+document.getElementById('btn-load').addEventListener('click', ()=>document.getElementById('load-file').click());
+document.getElementById('load-file').addEventListener('change', function(){
+  const file = this.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const d = JSON.parse(reader.result);
+      if(d.module !== 'farmrural' && !confirm('This file was saved from a different module. Load anyway?')) return;
+      completed.clear();
+      (d.completed||[]).forEach(id=>completed.add(id));
+      if(false && d.lang && I18N[d.lang]) lang = d.lang; /* language switching disabled for English-only release — remove "false &&" to re-enable */
+      if(d.theme) theme = d.theme;
+      if(d.mode) mode = d.mode;
+      document.body.dataset.theme = theme;
+      document.body.dataset.mode = mode;
+      document.getElementById('btn-mode').textContent = mode === 'light' ? '🌙' : '☀️';
+      applyLang(); renderAll(); buildThemeMenu(); buildLangMenu(); persist();
+    }catch(e){ alert('Could not read that file — is it a SafeLife progress file?'); }
+  };
+  reader.readAsText(file);
+  this.value = '';
+});
+
+// ═══════════════════════════════════════════
+// MODALS / PRINT / NAV
+// ═══════════════════════════════════════════
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-close').forEach(b=>b.addEventListener('click', ()=>closeModal(b.dataset.close)));
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click', e=>{ if(e.target === o) o.classList.remove('open'); }));
+document.getElementById('btn-manual').addEventListener('click', ()=>openModal('modal-manual'));
+document.getElementById('btn-cheat').addEventListener('click', ()=>openModal('modal-cheat'));
+document.getElementById('btn-print').addEventListener('click', ()=>openModal('modal-print'));
+document.getElementById('btn-search').addEventListener('click', ()=>{
+  const s = document.getElementById('search-input');
+  s.scrollIntoView({behavior:'smooth', block:'center'});
+  setTimeout(()=>s.focus(), 350);
+});
+
+function doPrint(cls){
+  document.querySelectorAll('.modal-overlay').forEach(o=>o.classList.remove('open'));
+  const wasOpen = new Set([...document.querySelectorAll('.check-card.open')]);
+  document.querySelectorAll('.check-card').forEach(c=>c.classList.add('open'));
+  if(cls) document.body.classList.add(cls);
+  const cleanup = ()=>{
+    document.body.classList.remove('print-zone','print-cheat');
+    document.querySelectorAll('.check-card').forEach(c=>{ if(!wasOpen.has(c)) c.classList.remove('open'); });
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+  setTimeout(()=>window.print(), 60);
+}
+document.getElementById('print-all').addEventListener('click', ()=>doPrint(null));
+document.getElementById('print-zone').addEventListener('click', ()=>doPrint('print-zone'));
+document.getElementById('print-cheat2').addEventListener('click', ()=>doPrint('print-cheat'));
+document.getElementById('btn-print-cheat').addEventListener('click', ()=>doPrint('print-cheat'));
+
+function visibleCards(){
+  return [...document.querySelectorAll('.zone-panel.active .check-card')].filter(c=>c.style.display !== 'none');
+}
+function nearestCardIx(cards){
+  const mark = window.innerHeight * 0.35;
+  let best = 0, bestDist = Infinity;
+  cards.forEach((c, i)=>{
+    const d = Math.abs(c.getBoundingClientRect().top - mark);
+    if(d < bestDist){ bestDist = d; best = i; }
+  });
+  return best;
+}
+function goToCard(cards, ix){
+  if(ix < 0){ window.scrollTo({top:0, behavior:'smooth'}); return; }
+  if(ix > cards.length - 1) ix = cards.length - 1;
+  const y = cards[ix].getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.35;
+  window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+}
+document.getElementById('fn-top').addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+document.getElementById('fn-next').addEventListener('click', ()=>{
+  const cards = visibleCards(); if(!cards.length) return;
+  goToCard(cards, nearestCardIx(cards) + 1);
+});
+document.getElementById('fn-prev').addEventListener('click', ()=>{
+  const cards = visibleCards(); if(!cards.length) return;
+  goToCard(cards, nearestCardIx(cards) - 1);
+});
+
+// ═══════════════════════════════════════════
+// MANUAL / CHEAT SHEET / COLLECTION
+// ═══════════════════════════════════════════
+function buildManual(){
+  document.getElementById('manual-body').innerHTML =
+    t('manualBody') +
+    '<h4>⚕</h4><p>' + t('disclaimer') + ' ' + t('langNote') + '</p>';
+}
+
+const GOLDEN_RULES = [
+  'Never allow children near moving machinery, and always switch off and remove the key before leaving any machine, even briefly',
+  'Treat every PTO shaft as a serious entanglement risk — check guards are fitted and intact before every use',
+  'Fence, cover, or closely supervise every pond, dam, irrigation channel, trough, well, and pit — young children can drown in very little water, very quickly and silently',
+  'Know and respect the kick and goring zones of every large animal on the property, and always keep a clear escape route when working near livestock',
+  'Store all chemicals, pesticides, and fuel locked away from children, in original labeled containers, away from animal feed',
+  'Treat grain bins and silos as engulfment hazards — never enter alone, and keep children well away from open bins',
+  'Be aware of overhead power line clearance whenever operating tall equipment, loaders, or irrigation pipe near power lines',
+  'Build a written, shared emergency plan that accounts for longer rural response times and gaps in mobile signal',
+  'Keep a well-stocked first aid kit suited to rural risks, and make sure every capable household member knows where it is',
+  'Walk the property regularly with a fresh eye — new hazards appear as seasons, stock, and equipment change'
+];
+const KEY_NUMBERS = [
+  ['PTO shaft guarding','fully shielded and inspected before every use; entanglement can occur in a fraction of a second'],
+  ['Water barrier height','fencing around ponds and open water generally at least approximately 1.2 m [4 ft] high with a self-closing, self-latching gate, per common child-safety barrier guidance'],
+  ['Kick zone distance','stay well outside a horse or cow\'s kicking range — generally described as an arc extending roughly 2 m [6-7 ft] behind and to the side of the animal'],
+  ['Chemical storage','locked, in original labeled containers, separated from animal feed and out of reach of children'],
+  ['PPE for pesticide handling','gloves, eye protection and appropriate clothing as specified on the product label, following WHO pesticide-safety guidance'],
+  ['Grain bin entry','never enter alone; treat flowing or crusted grain as an engulfment hazard requiring lock-out and a trained observer'],
+  ['Overhead power line clearance','maintain a substantial safe clearance from power lines when operating tall equipment — check local utility guidance for exact distances'],
+  ['ATV/quad bike use','age-appropriate machine size, helmet worn, and no passengers unless the model is specifically designed for one'],
+  ['Ladder angle/condition','inspected before use and set at a stable angle, generally close to 75 degrees (a 1:4 out-to-up ratio)'],
+  ['First aid kit','stocked for rural risks including bleeding control, and rechecked periodically, especially given longer emergency response times'],
+  ['Fire extinguisher near machinery/fuel','a working, in-date extinguisher kept near workshops, fuel storage, and machinery sheds'],
+  ['Slurry/effluent pit covers','securely covered or fenced at all times, given the serious and fast-acting gas and drowning risks they present'],
+  ['Emergency vehicle access','gates and lanes kept clear and marked so responders can reach the property without delay'],
+  ['Mobile signal planning','a known backup communication method identified for areas with limited or no mobile signal']
+];
+
+const CONTACTS_KEY = 'safelife-farmrural-contacts';
+const DEFAULT_CONTACTS = [
+  ['Emergency services',''],
+  ['Veterinarian',''],
+  ['Utility provider — electric',''],
+  ['Fuel supplier',''],
+  ['Nearest neighbour / farm assistance',''],
+  ['Insurance provider',''],
+  ['Agricultural safety advisor',''],
+  ['Poison control / chemical safety line','']
+];
+let contacts;
+try{
+  const raw = localStorage.getItem(CONTACTS_KEY);
+  contacts = raw ? JSON.parse(raw) : null;
+}catch(e){ contacts = null; }
+if(!contacts || !Array.isArray(contacts.list)) contacts = { list: DEFAULT_CONTACTS.map(c=>c.slice()), notes:'' };
+function saveContacts(){
+  try{ localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts)); }catch(e){}
+  buildCheatPrint();
+}
+function buildCheat(){
+  const body = document.getElementById('cheat-body');
+  const rules = GOLDEN_RULES.map(r=>'<li>' + r + '</li>').join('');
+  const nums = KEY_NUMBERS.map(n=>'<tr><td><strong>' + n[0] + '</strong></td><td>' + n[1] + '</td></tr>').join('');
+  body.innerHTML =
+    '<h4>📞 ' + t('cheatContacts') + '</h4>' +
+    '<p style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">' + t('cheatHint') + '</p>' +
+    '<div id="contact-rows"></div>' +
+    '<button class="btn btn-outline" id="add-contact" style="margin:8px 0 4px;">' + t('addContact') + '</button>' +
+    '<h4>⭐ ' + t('rules') + '</h4><ul class="rule-list">' + rules + '</ul>' +
+    '<h4>📏 ' + t('keyNums') + '</h4><table><tr><th>Check</th><th>Safe value / standard</th></tr>' + nums + '</table>' +
+    '<h4>📝 ' + t('myNotes') + '</h4>' +
+    '<textarea id="cheat-notes" placeholder="' + t('notesPh') + '" style="width:100%;min-height:80px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);padding:10px 12px;font-family:\'Inter\',sans-serif;font-size:13px;resize:vertical;"></textarea>';
+  renderContactRows();
+  const notesEl = document.getElementById('cheat-notes');
+  notesEl.value = contacts.notes || '';
+  notesEl.addEventListener('input', function(){ contacts.notes = this.value; saveContacts(); });
+  document.getElementById('add-contact').addEventListener('click', function(){
+    contacts.list.push(['','']);
+    renderContactRows(); saveContacts();
+    const rows = document.querySelectorAll('#contact-rows .c-name');
+    rows[rows.length-1].focus();
+  });
+  buildCheatPrint();
+}
+function renderContactRows(){
+  const wrap = document.getElementById('contact-rows');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  const inputCss = 'border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);padding:8px 10px;font-family:\'Inter\',sans-serif;font-size:13px;';
+  contacts.list.forEach((c, ix)=>{
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:6px;margin-bottom:6px;align-items:center;';
+    const name = document.createElement('input');
+    name.className = 'c-name'; name.type = 'text'; name.value = c[0];
+    name.placeholder = 'Name / service'; name.style.cssText = inputCss + 'flex:1.4;min-width:0;';
+    const num = document.createElement('input');
+    num.type = 'text'; num.value = c[1];
+    num.placeholder = '+ number'; num.style.cssText = inputCss + 'flex:1;min-width:0;font-weight:700;';
+    const del = document.createElement('button');
+    del.textContent = '✕'; del.title = t('delRow');
+    del.style.cssText = 'border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:8px;width:30px;height:34px;cursor:pointer;flex-shrink:0;';
+    name.addEventListener('input', function(){ contacts.list[ix][0] = this.value; saveContacts(); });
+    num.addEventListener('input', function(){ contacts.list[ix][1] = this.value; saveContacts(); });
+    del.addEventListener('click', function(){ contacts.list.splice(ix,1); renderContactRows(); saveContacts(); });
+    row.append(name, num, del);
+    wrap.appendChild(row);
+  });
+}
+function buildCheatPrint(){
+  const esc = s => String(s).replace(/</g,'&lt;');
+  const rules = GOLDEN_RULES.map(r=>'<li>' + r + '</li>').join('');
+  const nums = KEY_NUMBERS.map(n=>'<tr><td><strong>' + n[0] + '</strong></td><td>' + n[1] + '</td></tr>').join('');
+  const filled = contacts.list.filter(c=>c[0] || c[1]);
+  const chips = filled.map(h=>'<div class="cp-chip"><b>' + esc(h[0]||'—') + '</b><span>' + (esc(h[1]) || '____________') + '</span></div>').join('');
+  const activeQR = getSavedQR() || QR_IMAGE;
+  const qr = activeQR
+    ? '<img src="' + activeQR + '" alt="QR">'
+    : '<div class="qr-ph">' + (STORE_URL ? esc(STORE_URL) : 'Your QR<br>code here') + '</div>';
+  document.getElementById('cheat-print').innerHTML =
+    '<div class="cp-card">' +
+      '<div class="cp-head">' + ICONS.farmrural +
+        '<div><div class="cp-title">Safe<em>Life</em></div>' +
+        '<div class="cp-sub">' + t('cheatTitle') + ' · ' + t('heroTitle') + '</div></div>' +
+        '<div class="cp-tag">"To all moms by a mom"<br>NEBOSH &amp; OSHA trained HSE professional</div>' +
+      '</div>' +
+      '<div class="cp-contacts">' + chips + '</div>' +
+      '<div class="cp-cols">' +
+        '<div class="cp-rules"><h3>⭐ ' + t('rules') + '</h3><ul>' + rules + '</ul></div>' +
+        '<div class="cp-numsec"><h3>📏 ' + t('keyNums') + '</h3><table>' + nums + '</table></div>' +
+      '</div>' +
+      (contacts.notes ? '<div class="cp-notes"><b>' + t('myNotes') + '</b>' + esc(contacts.notes) + '</div>' : '') +
+      '<div class="cp-foot">' +
+        '<div>Made with care by <b>' + BRAND_NAME + '</b> · SafeLife Collection<br>' + t('disclaimer') + '</div>' +
+        '<div class="cp-qr">' + (STORE_URL ? '<div style="font-size:8px;">' + esc(STORE_URL) + '<br>Scan for the full collection</div>' : '') + qr + '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+// ═══════════════════════════════════════════
+// SELLER: per-product QR code, PIN-protected (each file's own STORE_KEY keeps these separate)
+// ═══════════════════════════════════════════
+const QR_KEY = STORE_KEY + '-qr';
+const QR_PIN_KEY = STORE_KEY + '-qrpin';
+function getSavedQR(){ try{ return localStorage.getItem(QR_KEY) || ''; }catch(e){ return ''; } }
+function sellerRenderLocked(){
+  const hasPin = !!localStorage.getItem(QR_PIN_KEY);
+  document.getElementById('seller-body').innerHTML = hasPin
+    ? '<p>Enter your PIN to manage this file\'s QR code.</p><input type="password" inputmode="numeric" maxlength="12" id="seller-pin-input" placeholder="PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:10px;">'
+      + '<div class="modal-actions"><button class="btn btn-primary" id="seller-unlock">Unlock</button></div>'
+    : '<p>No PIN set yet for this file. Create one now — you\'ll need it to change the QR code later. Every product file keeps its own separate PIN and QR code.</p>'
+      + '<input type="password" inputmode="numeric" maxlength="12" id="seller-pin-new" placeholder="Create a PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:8px;">'
+      + '<input type="password" inputmode="numeric" maxlength="12" id="seller-pin-confirm" placeholder="Confirm PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:10px;">'
+      + '<div class="modal-actions"><button class="btn btn-primary" id="seller-setpin">Set PIN</button></div>';
+  if(hasPin){
+    document.getElementById('seller-unlock').addEventListener('click', function(){
+      const val = document.getElementById('seller-pin-input').value;
+      if(val && val === localStorage.getItem(QR_PIN_KEY)) sellerRenderUnlocked();
+      else alert('Incorrect PIN.');
+    });
+  } else {
+    document.getElementById('seller-setpin').addEventListener('click', function(){
+      const a = document.getElementById('seller-pin-new').value, b = document.getElementById('seller-pin-confirm').value;
+      if(!a || a.length < 4){ alert('Use at least 4 digits.'); return; }
+      if(a !== b){ alert('PINs do not match.'); return; }
+      try{ localStorage.setItem(QR_PIN_KEY, a); }catch(e){}
+      sellerRenderUnlocked();
+    });
+  }
+}
+function sellerRenderUnlocked(){
+  const current = getSavedQR();
+  document.getElementById('seller-body').innerHTML =
+    '<p>Upload this product\'s QR code image. It replaces the placeholder on the printed cheat sheet — saved on this device only, separately for every product file.</p>' +
+    (current ? '<img src="' + current + '" style="width:110px;height:110px;border:1px solid var(--line);border-radius:9px;margin-bottom:10px;object-fit:contain;background:#fff;">' : '') +
+    '<input type="file" accept="image/*" id="seller-qr-file" style="margin-bottom:10px;">' +
+    '<div class="modal-actions">' +
+      '<button class="btn btn-outline" id="seller-remove-qr">Remove QR</button>' +
+      '<button class="btn btn-outline" id="seller-change-pin">Change PIN</button>' +
+      '<button class="btn btn-primary" id="seller-done">Done</button>' +
+    '</div>';
+  document.getElementById('seller-qr-file').addEventListener('change', function(e){
+    const file = e.target.files && e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try{ localStorage.setItem(QR_KEY, ev.target.result); }catch(e){}
+      buildCheatPrint();
+      sellerRenderUnlocked();
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('seller-remove-qr').addEventListener('click', function(){
+    try{ localStorage.removeItem(QR_KEY); }catch(e){}
+    buildCheatPrint();
+    sellerRenderUnlocked();
+  });
+  document.getElementById('seller-change-pin').addEventListener('click', function(){
+    try{ localStorage.removeItem(QR_PIN_KEY); }catch(e){}
+    sellerRenderLocked();
+  });
+  document.getElementById('seller-done').addEventListener('click', ()=>closeModal('modal-seller'));
+}
+document.getElementById('btn-seller').addEventListener('click', function(){ sellerRenderLocked(); openModal('modal-seller'); });
+
+const MODULES = [
+  {a:'0–28 Days'},
+  {a:'1–12 Months'},
+  {a:'1–3 Years'},
+  {a:'3–6 Years'},
+  {a:'6–12 Years'},
+  {a:'13–18 Years'},
+  {a:'19–29 Years'},
+  {a:'30–44 Years'},
+  {a:'45–64 Years'},
+  {a:'65–79 Years'},
+  {a:'80–89 Years'},
+  {a:'90+ Years'}
+];
+const MODULE_ICON_IX = [0,0,1,2,3,4,5,6,6,7,7,7];
+const SITUATION_MODULES = [
+  {name:'Pregnancy', sub:'Stage 0', status:'available', emoji:'🤰'},
+  {name:'Postpartum Recovery', sub:'Situation Module', status:'available', emoji:'🌷'},
+  {name:'Grandparent-Proofing', sub:'Situation Module', status:'available', emoji:'👵'},
+  {name:'Autism & Neurodivergent Children', sub:'Situation Module', status:'available', emoji:'♾️'},
+  {name:'Emergency Preparedness', sub:'Situation Module', status:'available', emoji:'🧳'},
+  {name:'Twins & Multiples', sub:'Situation Module', status:'available', emoji:'👯'},
+  {name:'Babysitter/Nanny Handover', sub:'Situation Module', status:'available', emoji:'🗒️'},
+  {name:'Dementia & Alzheimer\'s Care', sub:'Situation Module', status:'available', emoji:'🏠'},
+  {name:'Injury & Post-Surgery Recovery', sub:'Situation Module', status:'available', emoji:'🩹'},
+  {name:'Chronic Conditions Household', sub:'Situation Module', status:'available', emoji:'💊'},
+  {name:'Limited Mobility / Wheelchair', sub:'Situation Module', status:'available', emoji:'♿'},
+  {name:'Visually / Hearing Impaired', sub:'Situation Module', status:'available', emoji:'🦯'},
+  {name:'New Pet + Baby Household', sub:'Situation Module', status:'available', emoji:'🐾'},
+  {name:'The Caregiver\'s Own Safety', sub:'Situation Module', status:'available', emoji:'🛡️'},
+  {name:'New Home Move-In Audit', sub:'Situation Module', status:'available', emoji:'🏡'},
+  {name:'Farm & Rural Household', sub:'Situation Module', status:'current', emoji:'🚜'},
+  {name:'Home Office / WFH', sub:'Situation Module', status:'available', emoji:'💻'}
+];
+function buildSituationGrid(){
+  const grid = document.getElementById('situation-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  SITUATION_MODULES.forEach(m=>{
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    const tagClass = m.status === 'coming' ? 'coming' : (m.status === 'current' ? 'owned' : 'addon');
+    const tagLabel = m.status === 'coming' ? 'Coming Soon' : (m.status === 'current' ? '✓ Current Module' : 'Available Separately');
+    card.innerHTML = '<span class="m-emoji">' + m.emoji + '</span><span class="m-name">' + m.name + '</span><span class="m-age">' + m.sub + '</span>' +
+      '<span class="module-tag ' + tagClass + '">' + tagLabel + '</span>';
+    grid.appendChild(card);
+  });
+}
+
+function buildCollection(){
+  const grid = document.getElementById('collection-grid');
+  grid.innerHTML = '';
+  MODULES.forEach((m, mi)=>{
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    const iconIx = MODULE_ICON_IX[mi] != null ? MODULE_ICON_IX[mi] : mi;
+    card.innerHTML = '<span class="m-emoji">' + ICONS.stages[iconIx] + '</span><span class="m-name">' + t('mn'+(mi+1)) + '</span><span class="m-age">' + m.a + '</span>' +
+      '<span class="module-tag ' + (m.owned ? 'owned' : 'addon') + '">' + (m.owned ? t('owned') : t('addon')) + '</span>';
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+restore();
+injectIcons();
+document.body.dataset.theme = theme;
+document.body.dataset.mode = mode;
+document.getElementById('btn-mode').textContent = mode === 'light' ? '🌙' : '☀️';
+applyLang();
+fillStats();
+renderAll();
+buildThemeMenu();
+buildLangMenu();
+buildManual();
+buildCheat();
+buildCollection();
+buildSituationGrid();
+</script>
+</body>
+</html>
